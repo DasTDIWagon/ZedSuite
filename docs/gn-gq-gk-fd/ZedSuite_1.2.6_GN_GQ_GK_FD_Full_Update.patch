@@ -1,0 +1,814 @@
+--- a/src-tauri/src/detector/ecu/bosch/edc15vm/mod.rs
++++ b/src-tauri/src/detector/ecu/bosch/edc15vm/mod.rs
+@@ -651,6 +651,20 @@
+                 continue;
+             }
+             i += 1;
++        }
++        // GN three-bank 512 KiB layout: each calibration bank starts
++        // 0x4000 before its signed code at 0x50000/0x60000/0x70000.
++        // Using signed-code boundaries puts the first two calibration
++        // copies in CB1 and causes one-per-codeblock deduplication losses.
++        // Keep the older, separated-codeblock layout unchanged.
++        if data.len() == 0x80000
++            && codeblocks.iter().map(|cb| cb.start_address).collect::<Vec<_>>()
++                == [0x50000, 0x60000, 0x70000]
++        {
++            for cb in &mut codeblocks {
++                cb.start_address -= 0x4000;
++                cb.end_address -= 0x4000;
++            }
+         }
+         codeblocks
+     }
+@@ -906,22 +920,25 @@
+                     } else {
+                         (map.y_axis_address, y_len)
+                     };
+-                    let da_max = da_addr
+-                        .map(|addr| {
+-                            (0..da_len)
+-                                .map(|i| {
+-                                    let off = addr as usize + i * 2;
+-                                    if off + 1 < data.len() {
+-                                        u16::from_le_bytes([data[off], data[off + 1]])
+-                                    } else {
+-                                        0
+-                                    }
+-                                })
+-                                .max()
+-                                .unwrap_or(0)
++                    let da_values: Vec<u16> = da_addr
++                        .and_then(|addr| {
++                            let start = addr as usize;
++                            let bytes = data.get(start..start.checked_add(da_len * 2)?)?;
++                            Some(bytes.chunks_exact(2)
++                                .map(|w| u16::from_le_bytes([w[0], w[1]]))
++                                .collect())
+                         })
+-                        .unwrap_or(0);
+-                    if da_max <= 2600 && da_max >= 1200 {
++                        .unwrap_or_default();
++                    let da_max = da_values.iter().copied().max().unwrap_or(0);
++                    // Tuned MAP axes can extend past the old 2600 mbar cap.
++                    // Require a pressure-like start and increasing 13-point
++                    // axis so high-range MAF/N75 axes do not become MAP tables.
++                    let tuned_pressure_axis = da_len == 13
++                        && da_values.len() == da_len
++                        && (400..=1200).contains(&da_values[0])
++                        && da_values.windows(2).all(|w| w[0] < w[1])
++                        && (2601..=4000).contains(&da_max);
++                    if (1200..=2600).contains(&da_max) || tuned_pressure_axis {
+                         map.name = Some("IQ by MAP limiter".to_string());
+                         map.correction_factor = Some(0.01);
+                         map.category = Some("Smoke limitation".to_string());
+@@ -1280,7 +1297,21 @@
+                     && temp.windows(2).all(|w| w[0] < w[1])
+                     && temp.iter().all(|&v| (2200..=3900).contains(&v));
+ 
+-                if rpm_ok && temp_ok {
++                // Keep known GN4308 limiter locations visible when a tune has
++                // changed the temperature breakpoints outside the stock range.
++                // Do not infer a different temperature encoding from the values:
++                // C5 remains Kelvin * 10, including for a suspicious tuned axis.
++                let gn_layout = data.len() == 0x80000
++                    && xh == 0xF9 && yh == 0xC5
++                    && x_len == 12 && y_len == 5
++                    && matches!(map.address, 0x5AFFC | 0x7AFFC)
++                    && map.x_axis_address == Some(map.address - 0x26)
++                    && map.y_axis_address == Some(map.address - 0x0A);
++                let unusual_temp = !temp_ok && gn_layout
++                    && temp.len() == 5
++                    && temp.windows(2).all(|w| w[0] < w[1]);
++
++                if rpm_ok && (temp_ok || unusual_temp) {
+                     map.name = Some("SOI limiter".to_string());
+                     map.category = Some("Start of injection".to_string());
+                     map.unit = Some("deg CrS".to_string());
+@@ -1290,13 +1321,20 @@
+                         "Maximum SOI | X: Temperature (°C) | Y: Engine speed (rpm)"
+                             .to_string(),
+                     );
++                    if unusual_temp {
++                        map.description = Some(
++                            "Maximum SOI | X: Temperature (°C) | Y: Engine speed (rpm) | WARNING: temperature axis outside expected Kelvin*10 range; verify binary calibration"
++                                .to_string(),
++                        );
++                    }
+                     named = true;
+                 }
+             }
+ 
+-            // ── Size 162 (9x9) - Cranking fuel map (Start IQ) ──
++            // ── Cranking fuel maps (Start IQ): 9x9 and GQ automatic-bank 9x8 ──
+             // 4MKGOLF: DD(9)/C1(9) at 0x6C64A and 0x6C72C
+-            if !named && map.size == 162 && x_len == 9 && y_len == 9 {
++            if !named && ((map.size == 162 && x_len == 9 && y_len == 9)
++                || (map.size == 144 && matches!((x_len, y_len), (9, 8) | (8, 9)))) {
+                 if matches!((xh, yh),
+                     (0xDD, 0xC1) | (0xC1, 0xDD) | (0xEB, 0xC1) | (0xC1, 0xEB) |
+                     (0xDC, 0xC1) | (0xC1, 0xDC)
+@@ -1422,7 +1460,11 @@
+                     let data_ok = if d + 4 <= data.len() {
+                         let d1 = u16::from_le_bytes([data[d], data[d + 1]]);
+                         let d2 = u16::from_le_bytes([data[d + 2], data[d + 3]]);
+-                        d1 < 1000 && (2000..=3500).contains(&d2)
++                        // DC9C is used by GN4308 with tuned pressure endpoints.
++                        // Retain the ADC endpoint checks and limit the extended
++                        // pressure range to this known header family.
++                        d1 < 1000 && ((2000..=3500).contains(&d2)
++                            || (xfull == 0xDC9C && (3501..=5000).contains(&d2)))
+                     } else {
+                         false
+                     };
+@@ -2449,3 +2491,147 @@
+         }).collect()
+     }
+ }
++
++#[cfg(test)]
++mod gn4308_limiter_tests {
++    use super::*;
++
++    fn fixture(cb2_temp: [u16; 5]) -> Vec<u8> {
++        let mut data = vec![0u8; 0x80000];
++        for (base, second_rpm, temps) in [
++            (0x50000usize, 1150, [3031, 3134, 3333, 3381, 3532]),
++            (0x70000usize, 1239, cb2_temp),
++        ] {
++            data[base + 1..base + 1 + CODEBLOCK_SIGNATURE.len()]
++                .copy_from_slice(&CODEBLOCK_SIGNATURE);
++            let mut words = vec![0xF948, 12];
++            words.extend([210, second_rpm, 1491, 1743, 1995, 2247,
++                2499, 2751, 3003, 3255, 3738, 3990]);
++            words.extend([0xC504, 5]);
++            words.extend(temps);
++            words.extend([1000; 60]);
++            for (i, word) in words.into_iter().enumerate() {
++                let off = base + 0xAFD2 + i * 2;
++                data[off..off + 2].copy_from_slice(&word.to_le_bytes());
++            }
++        }
++        data
++    }
++
++    #[test]
++    fn stock_and_modified_axes_preserve_kelvin_scaling() {
++        for temps in [[3031, 3134, 3333, 3381, 3532], [3000, 4030, 6020, 7020, 8010]] {
++            let maps = EDC15VMDetector::new().detect(&fixture(temps));
++            for (addr, cb) in [(0x5AFFC, 1), (0x7AFFC, 2)] {
++                let m = maps.iter().find(|m| m.address == addr).unwrap();
++                assert_eq!(m.name.as_deref(), Some("SOI limiter"));
++                assert_eq!(m.codeblock_id, Some(cb));
++                assert_eq!(m.correction_factor, Some(0.01));
++                assert_eq!(m.x_axis_correction, Some(0.1));
++                assert_eq!(m.x_axis_offset, Some(-273.1));
++                let warning = m.description.as_deref().unwrap().contains("WARNING");
++                assert_eq!(warning, addr == 0x7AFFC && temps[4] == 8010);
++            }
++        }
++    }
++
++    #[test]
++    fn rejects_nonmonotonic_modified_axis() {
++        let maps = EDC15VMDetector::new().detect(&fixture([3000, 4030, 6020, 6020, 8010]));
++        assert!(!maps.iter().any(|m| m.address == 0x7AFFC && m.name.as_deref() == Some("SOI limiter")));
++    }
++}
++
++#[cfg(test)]
++mod tuned_map_pressure_tests {
++    use super::*;
++    fn classify(start: u16, end: u16, reversed: bool) -> String {
++        let mut words = vec![0xDD00u16, 16];
++        words.extend((0..16).map(|i| 800 + i * 300));
++        words.extend([0xDA00, 13]);
++        words.extend((0..13).map(|i| start + ((end - start) as u32 * i / 12) as u16));
++        words.extend([2500; 208]);
++        let data: Vec<u8> = words.iter().flat_map(|w| w.to_le_bytes()).collect();
++        let cb = Codeblock { id: 1, start_address: 0, end_address: data.len() as u32 };
++        let detector = EDC15VMDetector::new();
++        let mut m = detector.try_detect_map(&data, 0, &cb).unwrap();
++        if reversed {
++            std::mem::swap(&mut m.x_axis_address, &mut m.y_axis_address);
++            m.dimensions = MapDimensions::TwoDimensional { rows: 16, cols: 13 };
++        }
++        detector.name_known_maps(&data, vec![m])[0].name.clone().unwrap()
++    }
++    #[test]
++    fn extended_pressure_is_map_in_both_orientations() {
++        for end in [2600, 2650, 3000, 4000] {
++            for reversed in [false, true] {
++                assert_eq!(classify(800, end, reversed), "IQ by MAP limiter");
++            }
++        }
++    }
++    #[test]
++    fn high_range_axes_stay_n75() {
++        for (start, end) in [(800, 4500), (3000, 8500), (5000, 9500)] {
++            assert_eq!(classify(start, end, false), "N75 duty cycle");
++        }
++    }
++}
++
++#[cfg(test)]
++mod map_linearization_tuned_tests {
++    use super::*;
++    fn named(header: u16, axis: [u16; 2], pressure: [u16; 2]) -> bool {
++        let words = [header, 2, axis[0], axis[1], pressure[0], pressure[1]];
++        let data: Vec<u8> = words.iter().flat_map(|w| w.to_le_bytes()).collect();
++        let cb = Codeblock { id: 1, start_address: 0, end_address: 12 };
++        let detector = EDC15VMDetector::new();
++        let m = detector.try_detect_map(&data, 0, &cb).unwrap();
++        detector.name_known_maps(&data, vec![m]).iter()
++            .any(|m| m.name.as_deref() == Some("MAP linearization"))
++    }
++    #[test]
++    fn stock_and_extended_dc9c_detect() {
++        for upper in [2600, 3500, 4300, 5000] {
++            assert!(named(0xDC9C, [82, 989], [400, upper]));
++        }
++    }
++    #[test]
++    fn unrelated_or_invalid_curves_rejected() {
++        assert!(!named(0xDC98, [82, 989], [400, 4300]));
++        assert!(!named(0xDC9C, [82, 989], [400, 5001]));
++        assert!(!named(0xDC9C, [0, 1023], [0, 4300]));
++        assert!(!named(0xDC9C, [82, 989], [1000, 4300]));
++    }
++}
++
++#[cfg(test)]
++mod three_bank_layout_tests {
++    use super::*;
++    fn signatures(starts: &[usize]) -> Vec<u8> {
++        let mut data=vec![0u8;0x80000];
++        for &start in starts { data[start+1..start+1+CODEBLOCK_SIGNATURE.len()].copy_from_slice(&CODEBLOCK_SIGNATURE); }
++        data
++    }
++    #[test]
++    fn adjacent_three_bank_boundaries() {
++        let data=signatures(&[0x50000,0x60000,0x70000]);
++        let blocks=EDC15VMDetector::new().find_codeblocks(&data);
++        let ranges: Vec<_>=blocks.iter().map(|cb|(cb.id,cb.start_address,cb.end_address)).collect();
++        assert_eq!(ranges,vec![(1,0x4C000,0x5C000),(2,0x5C000,0x6C000),(3,0x6C000,0x7C000)]);
++        // The real 8x8 structures straddle the old signed-code boundaries.
++        let mut maps=Vec::new();
++        for (addr,cb) in [(0x4C8AC,1),(0x5C8AC,2),(0x6C8AC,3)] {
++            let mut m=DetectedMap::new(addr,128,MapDimensions::TwoDimensional{rows:8,cols:8},DataType::UInt16);
++            m.name=Some("MAF correction by temperature".to_string());
++            m.codeblock_id=Some(cb);maps.push(m);
++        }
++        EDC15VMDetector::dedupe_unique_per_codeblock(&data,&mut maps);
++        assert_eq!(maps.len(),3);
++    }
++    #[test]
++    fn separated_gn_layout_unchanged() {
++        let blocks=EDC15VMDetector::new().find_codeblocks(&signatures(&[0x50000,0x70000]));
++        assert_eq!((blocks[0].start_address,blocks[0].end_address),(0x50000,0x60000));
++        assert_eq!((blocks[1].start_address,blocks[1].end_address),(0x70000,0x80000));
++    }
++}
+--- a/src-tauri/src/detector/mod.rs
++++ b/src-tauri/src/detector/mod.rs
+@@ -214,8 +214,8 @@
+     /// chaque détecteur (choix d'affichage) :
+     /// - orthographe « linearisation » dans tous les noms de maps (jamais
+     ///   « linearization ») ;
+-    /// - maps masquées sur tous les calculateurs : « Inverse driver wish »
+-    ///   et « MAF linearisation » ;
++    /// - « Inverse driver wish » affichée sur EDC15VM ; masquée sur les
++    ///   autres familles. « MAF linearisation » reste masquée partout ;
+     /// - EDC16 : seules les durations 00-05 et le Duration Selector sont
+     ///   affichés — « Duration 06+ », « Duration (Dynamic) » et « Duration
+     ///   min. injection break after main injection » sont masquées (comme
+@@ -239,7 +239,7 @@
+             let lower = map.name.as_deref().unwrap_or("").to_ascii_lowercase();
+ 
+             // Masquées partout
+-            if (lower.contains("inverse") && lower.contains("driver"))
++            if (family != "EDC15VM" && lower.contains("inverse") && lower.contains("driver"))
+                 || lower.contains("maf linearisation")
+             {
+                 continue;
+@@ -314,3 +314,27 @@
+     }
+ 
+ }
++
++#[cfg(test)]
++mod inverse_visibility_tests {
++    use super::*;
++    use crate::models::{DataType, MapDimensions};
++    fn inverse_map() -> DetectedMap {
++        let mut m=DetectedMap::new(0x4C96C,384,MapDimensions::TwoDimensional { rows:12,cols:16 },DataType::UInt16);
++        m.name=Some("Inverse driver wish".to_string());
++        m.category=Some("Engine fuel request".to_string());
++        m.codeblock_id=Some(1);m
++    }
++    #[test]
++    fn vm_inverse_survives_finalization() {
++        let maps=MapDetector::finalize_maps(vec![inverse_map()],false,"EDC15VM");
++        assert_eq!(maps.len(),1);
++        assert_eq!(maps[0].name.as_deref(),Some("Inverse driver wish"));
++        assert_eq!(maps[0].codeblock_id,Some(1));
++    }
++    #[test]
++    fn other_family_visibility_unchanged() {
++        assert!(MapDetector::finalize_maps(vec![inverse_map()],false,"EDC15P").is_empty());
++        assert!(MapDetector::finalize_maps(vec![inverse_map()],true,"EDC16").is_empty());
++    }
++}
+--- a/src-tauri/src/commands.rs
++++ b/src-tauri/src/commands.rs
+@@ -225,7 +225,9 @@
+ ///       que l'axe de régime a été réécrit) ; EDC16U34 : un SVRL sous
+ ///       3000 tr/min n'est plus retenu (issue #50) ; MAP linearisation à
+ ///       l'axe brut, comme EDCSuite (913 et 44 sur un capteur 4 bars).
+-pub const DETECTOR_VERSION: u32 = 50;
++///   51 — Custom GN multimap detection fixes and EDC15VM inverse driver
++///        wish visibility; refresh projects with stale detection results.
++pub const DETECTOR_VERSION: u32 = 52;
+ 
+ /// Version du moteur de détection, pour comparaison avec celle enregistrée
+ /// dans un projet.
+--- /dev/null
++++ b/src/lib/ecu/gn4308-multimap.ts
+@@ -0,0 +1,151 @@
++import { correctEDC15PChecksum } from "@/lib/ecu/bosch/checksums/edc15p-checksum";
++export type MultimapSelector = "cruise" | "brake" | "brakeCruise";
++// This fingerprint covers the complete inspected program, including the hook,
++// selector RAM references and unused code cave. Calibration banks and the
++// program checksum storage are excluded. A part number alone is insufficient.
++const GN_PROGRAM_HASH = "5a1ee89a5d99ef873c80246a64d13bd8fcea55aa13ccd7885b54d71d07805030";
++// FD4102 supplied by the user: main program 0x14000..0x4BFFFB is identical
++// to GN4308. Only identification metadata and its checksum differ below it.
++const FD_PROGRAM_HASH = "34b4962b9feedada9da0aff55303b96b712b81a691cbbbeb00c4ace26af4a188";
++const GQ_PROGRAM_HASH = "2c43ed86794f45530be34ffa43732ebc1c17ce0d6afb7393afaf1ecd5231bae4";
++const GK_PROGRAM_HASH = "b8d45ea3aab8ce38b9635bfd20f706ffa15bc9a83720345abe0c0c51822ac9aa";
++const SIGNATURE = [0x67, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x56, 0x34, 0x2e, 0x31];
++function matches(data: Uint8Array, address: number, bytes: readonly number[]): boolean {
++  return bytes.every((value, index) => data[address + index] === value);
++}
++export async function validateGNFDMultimapInput(input: Uint8Array): Promise<void> {
++  if (input.length !== 0x80000) throw new Error("This conversion requires a complete 512 KiB ECU file.");
++  const identity = (address: number) => String.fromCharCode(...input.slice(address, address + 11));
++  const programHash = await binaryHash(input.slice(0, 0x4bffc));
++  const isGK = programHash === GK_PROGRAM_HASH;
++  const identityOK = isGK
++    ? [0x538d4, 0x738d4].every(address => identity(address) === "038906012GK")
++    : [0x53e67, 0x73e67].every(address => /^038906012(GN|FD|GQ)$/.test(identity(address)));
++  if (!identityOK) throw new Error("Multi-Map Beta supports only inspected FD, GN, GQ and GK firmware profiles.");
++  if (![GN_PROGRAM_HASH, FD_PROGRAM_HASH, GQ_PROGRAM_HASH, GK_PROGRAM_HASH].includes(programHash))
++    throw new Error("This program differs from the inspected beta firmware. It needs a separate compatibility profile.");
++  if (programHash === FD_PROGRAM_HASH && ![0x53e67, 0x63e67, 0x73e67].every(address => identity(address) === "038906012FD"))
++    throw new Error("The FD firmware bank identities are not supported.");
++  if (!matches(input, 0x50001, SIGNATURE) || !matches(input, 0x70001, SIGNATURE) ||
++      !matches(input, 0x51bf0, [isGK ? 12 : 2, 0]) || !matches(input, 0x71bf0, [isGK ? 11 : 1, 0]))
++    throw new Error("The original bank layout is not supported.");
++  const middleEmpty = input.slice(0x5c000, 0x6c000).every(value => value === 0xc3);
++  const stockFDMiddle = programHash === FD_PROGRAM_HASH &&
++    matches(input, 0x60001, SIGNATURE) && matches(input, 0x61bf0, [4, 0]);
++  if (!middleEmpty && !stockFDMiddle)
++    throw new Error("The middle bank is in use and does not match the supported original FD layout.");
++}
++export async function binaryHash(data: Uint8Array): Promise<string> {
++  const hash = await crypto.subtle.digest("SHA-256", new Uint8Array(data).buffer);
++  return Array.from(new Uint8Array(hash), b => b.toString(16).padStart(2, "0")).join("");
++}
++export type MultimapVehicleConfiguration = "manual" | "automatic" | "4x4";
++export type MultimapSourceBank = 1 | 2 | 3;
++export type MultimapBankInfo = { bank: MultimapSourceBank; start: number; end: number; marker: "SG" | "AG"; bankID: number };
++
++// Save the entire generated result against the version's raw imported/original
++// base. Old cell/axis edits must be cleared after staging this byte delta.
++export function buildMultimapVersionChanges(base: Uint8Array, result: Uint8Array): Map<number, { oldValue: number; newValue: number }> {
++  if (base.length !== result.length) throw new Error("The version base and generated file sizes differ.");
++  const changes = new Map<number, { oldValue: number; newValue: number }>();
++  for (let address = 0; address < result.length; address++) {
++    if (base[address] !== result[address]) changes.set(address, { oldValue: base[address], newValue: result[address] });
++  }
++  return changes;
++}
++
++export function getMultimapSourceBanks(input: Uint8Array): MultimapBankInfo[] {
++  if (input.length !== 0x80000) return [];
++  const banks: MultimapBankInfo[] = [];
++  for (const bank of [1, 2, 3] as const) {
++    const start = 0x4c000 + (bank - 1) * 0x10000;
++    const component = String.fromCharCode(...input.slice(start + 0x78d4, start + 0x78d4 + 100));
++    const marker = /\b(SG|AG)\b/.exec(component)?.[1] as "SG" | "AG" | undefined;
++    const expectedIDs = bank === 1 ? [2, 12] : bank === 2 ? [3, 4] : [1, 11];
++    if (/^038906012(?:GN|FD|GQ|GK) /.test(component) && marker &&
++        matches(input, start + 0x4001, SIGNATURE) && expectedIDs.includes(input[start + 0x5bf0]) && input[start + 0x5bf1] === 0)
++      banks.push({ bank, start, end: start + 0x10000, marker, bankID: input[start + 0x5bf0] });
++  }
++  return banks;
++}
++
++export async function applyGN4308Multimap(input: Uint8Array, selector: MultimapSelector, initializeAllBanks: boolean, configuration: MultimapVehicleConfiguration, source: MultimapSourceBank): Promise<Uint8Array> {
++  if (!["manual", "automatic", "4x4"].includes(configuration)) throw new Error("Choose the vehicle configuration.");
++  if (configuration === "4x4") throw new Error("No verified 4×4 source bank is available for these firmware profiles.");
++  if (!getMultimapSourceBanks(input).some(bank => bank.bank === source))
++    throw new Error("The chosen source code block is absent or has an unsupported bank structure.");
++  if ((configuration === "automatic" || source !== 1) && !initializeAllBanks)
++    throw new Error("This source/configuration requires copying the selected bank to all three banks.");
++  if (configuration === "automatic" && selector !== "brakeCruise")
++    throw new Error("Automatic configuration requires the experimental brake + cruise SET selector.");
++  if (selector !== "cruise" && selector !== "brake" && selector !== "brakeCruise") throw new Error("Choose a selector method.");
++  if (initializeAllBanks && matches(input, 0x14764, [0xda, 0x09, 0x00, 0xa0])) {
++    // Accept only this tool's exact selector code and known three-bank layout.
++    const expected = [...ROUTINE];
++    if (input[0x1a006] === 0x66 && input[0x1a00e] === 0x69) expected[6] = 0x66;
++    else if (input[0x1a006] === 0x63 && input[0x1a00e] === 0x66) expected[14] = 0x66;
++    if (!matches(input, 0x1a000, expected) || !matches(input, 0x60001, SIGNATURE) || !matches(input, 0x61bf0, [3, 0]))
++      throw new Error("This existing multimap is not a recognized beta conversion.");
++    const originalProgram = new Uint8Array(input);
++    originalProgram.set([0x08, 0x04, 0xf0, 0x94], 0x14764);
++    originalProgram.fill(0xc3, 0x1a000, 0x1a000 + ROUTINE.length);
++    originalProgram.fill(0xc3, 0x5c000, 0x6c000);
++    // FD validation also checks its middle-bank identity; retain it for this check.
++    if (await binaryHash(originalProgram.slice(0, 0x4bffc)) === FD_PROGRAM_HASH) {
++      originalProgram.set(input.slice(0x53e67, 0x53e72), 0x63e67);
++      originalProgram.set(SIGNATURE, 0x60001);
++      originalProgram.set([4, 0], 0x61bf0);
++    }
++    await validateGNFDMultimapInput(originalProgram);
++  } else await validateGNFDMultimapInput(input);
++  const fingerprintInput = new Uint8Array(input);
++  fingerprintInput.set([0x08, 0x04, 0xf0, 0x94], 0x14764);
++  fingerprintInput.fill(0xc3, 0x1a000, 0x1a000 + ROUTINE.length);
++  const isGK = await binaryHash(fingerprintInput.slice(0, 0x4bffc)) === GK_PROGRAM_HASH;
++  const output = new Uint8Array(input);
++  const sourceStart = 0x4c000 + (source - 1) * 0x10000;
++  // Snapshot before replacing any bank. Copy layout, axes, calibration and
++  // configuration from the selected original bank, retaining selector IDs.
++  const sourceBank = input.slice(sourceStart, sourceStart + 0x10000);
++  output.set(sourceBank, 0x5c000);
++  output[0x61bf0] = 3;
++  if (initializeAllBanks) {
++    // Copy the complete layout, axes, maps and configuration, not just cells.
++    // Keep the final bank's original identifier at its original location.
++    output.set(sourceBank, 0x4c000);
++    output.set(input.slice(0x51bf0, 0x51bf2), 0x51bf0);
++    output.set(sourceBank, 0x6c000);
++    output.set(input.slice(0x71bf0, 0x71bf2), 0x71bf0);
++  }
++  output.set([0xda, 0x09, 0x00, 0xa0], 0x14764);
++  output.set(ROUTINE, 0x1a000);
++  if (selector === "brake") output[0x1a00e] = 0x66;
++  // Replace the clutch input with brake; retain the cruise SET input.
++  // All original branches and the selector latch remain unchanged.
++  if (selector === "brakeCruise") output[0x1a006] = 0x66;
++  // With an identical program, these selector-specific program checksum words
++  // preserve the checksum seed used by the original calibration blocks.
++  output.set((isGK ? GK_PROGRAM_CHECKSUMS : PROGRAM_CHECKSUMS)[selector], 0x4bffc);
++  const corrected = correctEDC15PChecksum(Array.from(output));
++  if (corrected.info.variant !== "tdi41_2002" || corrected.info.found !== 11)
++    throw new Error("The multimap checksum layout is not supported.");
++  const result = new Uint8Array(corrected.correctedData);
++  const check = correctEDC15PChecksum(Array.from(result)).info;
++  if (check.result !== "OK" || check.found !== 11 || check.fixed !== 0 || check.matched !== 11)
++    throw new Error("Multimap checksum verification failed; no changes were applied.");
++  // Checksum correction may update storage words, but may never alter tuning.
++  const checksumOffsets = new Set([0xfffc, 0x13ffc, 0x4fffc, 0x50b7c,
++    0x5bffc, 0x5fffc, 0x60b7c, 0x6bffc, 0x6fffc, 0x70b7c, 0x7bffc]);
++  for (let address = 0; address < result.length; address++) {
++    const checksumWord = address & ~3;
++    if (result[address] !== output[address] && !checksumOffsets.has(checksumWord))
++      throw new Error("Checksum correction changed an unexpected byte; no changes were applied.");
++  }
++  return result;
++}
++const ROUTINE = [243, 242, 206, 229, 243, 244, 99, 195, 154, 242, 38, 0, 243, 244, 105, 195, 154, 242, 2, 0, 47, 241, 13, 33, 154, 241, 31, 32, 46, 241, 231, 244, 40, 0, 247, 244, 207, 229, 70, 0, 60, 0, 45, 9, 70, 0, 52, 0, 45, 12, 209, 48, 230, 0, 60, 0, 230, 1, 61, 0, 13, 12, 209, 48, 230, 0, 52, 0, 230, 1, 53, 0, 13, 6, 209, 48, 230, 0, 56, 0, 230, 1, 57, 0, 13, 0, 13, 1, 46, 241, 243, 244, 207, 229, 45, 18, 41, 65, 247, 244, 207, 229, 70, 0, 52, 0, 45, 6, 70, 0, 56, 0, 45, 6, 230, 244, 64, 31, 13, 6, 230, 244, 160, 15, 13, 3, 230, 244, 224, 46, 13, 0, 247, 242, 206, 229, 8, 4, 240, 148, 219, 0];
++const PROGRAM_CHECKSUMS = { cruise: [251, 156, 14, 126], brake: [134, 18, 206, 119], brakeCruise: [149, 153, 84, 82] };
++
++
++// Separate compensation preserves the inspected GK KD34 program checksum seed.
++const GK_PROGRAM_CHECKSUMS = { cruise: [200, 114, 69, 184], brake: [130, 196, 123, 174], brakeCruise: [35, 66, 116, 76] };
+--- /dev/null
++++ b/src/components/multimap-modal.tsx
+@@ -0,0 +1,69 @@
++"use client";
++import { useState } from "react";
++import { Button } from "@/components/ui/button";
++import { getModalGlassStyle } from "@/lib/modal-glass";
++import type { MultimapSelector, MultimapVehicleConfiguration, MultimapSourceBank, MultimapBankInfo } from "@/lib/ecu/gn4308-multimap";
++export function MultimapModal({ theme, busy, sourceBanks, includeUnsavedEdits, onIncludeUnsavedChange, onClose, onApply }: {
++  theme: "default" | "light" | "oled"; busy: boolean; sourceBanks: MultimapBankInfo[]; includeUnsavedEdits: boolean; onIncludeUnsavedChange: (include: boolean) => void; onClose: () => void; onApply: (selector: MultimapSelector, initializeAllBanks: boolean, configuration: MultimapVehicleConfiguration, source: MultimapSourceBank) => Promise<void>;
++}) {
++  const [selector, setSelector] = useState<MultimapSelector>("cruise");
++  const [initializeAllBanks, setInitializeAllBanks] = useState(true);
++  const [acknowledged, setAcknowledged] = useState(false);
++  const [configuration, setConfiguration] = useState<MultimapVehicleConfiguration | "">("");
++  const [sourceBank, setSourceBank] = useState<MultimapSourceBank | "">("");
++  const sourceInfo = sourceBanks.find(bank => bank.bank === sourceBank);
++  return <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={e => e.stopPropagation()}>
++    <section role="dialog" aria-modal="true" aria-labelledby="multimap-title" className="w-full max-w-lg max-h-[90vh] overflow-y-auto mx-4 rounded-lg border p-6 space-y-5" style={{ ...getModalGlassStyle(theme), color: theme === "light" ? "black" : "white" }}>
++      <h2 id="multimap-title" className="text-xl font-bold">Multi-Map Beta</h2>
++      <p className="text-sm">Currently applicable only to inspected FD4102, GN4308, GQ4307 and GK KD34 firmware profiles with a supported original bank layout, including edited calibration maps. Other ECUs are not supported until further testing is completed. GK uses a separate fingerprint, bank-ID checks and checksum compensation. Its selector runtime behavior remains unverified. Choose your vehicle configuration and the code block containing the tune to keep. Create and select a new version first.</p>
++      <div role="alert" className="rounded-md border border-amber-500 bg-amber-500/10 p-3 text-sm space-y-2">
++        <p className="font-bold">All multimap support is in the test phase.</p>
++        <p>This includes FD, GN, GQ and GK. A working file or successful checksum check does not guarantee that another ECU or vehicle will work. Incorrect firmware can prevent starting, damage the ECU or cause unsafe vehicle operation. Use at your own risk. Keep an original backup and obtain qualified bench testing before flashing.</p>
++      </div>
++      <label className="block text-sm font-medium">Vehicle configuration (required)
++        <select value={configuration} disabled={busy} className="block w-full mt-2 rounded-md border bg-transparent p-2" onChange={event => {
++          const value = event.target.value as MultimapVehicleConfiguration | "";
++          setConfiguration(value); setAcknowledged(false);
++          if (value === "automatic") { setInitializeAllBanks(true); setSelector("brakeCruise"); }
++        }}>
++          <option value="">Choose your configuration</option>
++          <option value="manual">Manual</option>
++          <option value="automatic">Automatic</option>
++          <option value="4x4" disabled>4×4 — no verified source bank available</option>
++        </select>
++      </label>
++      <label className="flex gap-3 text-sm"><input type="checkbox" checked={includeUnsavedEdits} disabled={busy} onChange={event => { onIncludeUnsavedChange(event.target.checked); setAcknowledged(false); }} />Include unsaved edits</label>
++      <p className="text-sm">{includeUnsavedEdits ? "Uses the selected version's current working data, including unsaved cell, axis and binary edits. Edits in other banks can still be overwritten by the chosen source." : "Uses the selected version's last saved data, including its saved tune. Unsaved edits are excluded and discarded from the working version when this conversion is applied. Save them or create a backup version first if you want to keep them."}</p>
++      <label className="block text-sm font-medium">Source code block containing the tune to keep (required)
++        <select value={sourceBank} disabled={busy} className="block w-full mt-2 rounded-md border bg-transparent p-2" onChange={event => {
++          const value = event.target.value ? Number(event.target.value) as MultimapSourceBank : "";
++          setSourceBank(value); setAcknowledged(false);
++          if (value && value !== 1) setInitializeAllBanks(true);
++        }}>
++          <option value="">Choose the bank containing your tune</option>
++          {([1, 2, 3] as const).map(bank => {
++            const info = sourceBanks.find(entry => entry.bank === bank);
++            return <option key={bank} value={bank} disabled={!info}>CB{bank}{info ? ` — ${info.marker} marker, ID ${info.bankID}` : " — unavailable"}</option>;
++          })}
++        </select>
++      </label>
++      <p className="text-sm">Choose where your actual tune is stored, regardless of factory labels. SG/AG markers do not tell us whether a bank is stock, tuned, or appropriate for your vehicle. Copies use the working or saved version selected above; no stock tables are downloaded or substituted. If you are unsure which bank contains your tune, cancel and compare the maps first.</p>
++      {sourceInfo && <p role="status" className="text-sm font-medium">Source: CB{sourceInfo.bank} [0x{sourceInfo.start.toString(16).toUpperCase()}, 0x{sourceInfo.end.toString(16).toUpperCase()}). {initializeAllBanks ? `CB${sourceInfo.bank} is copied to all three selector banks. Calibration in the other two banks is overwritten.` : "CB1 is copied to CB2; CB3 is preserved."}</p>}
++      {sourceInfo && configuration && ((configuration === "manual" && sourceInfo.marker === "AG") || (configuration === "automatic" && sourceInfo.marker === "SG")) && <p role="alert" className="text-sm text-amber-500">The source marker differs from the selected vehicle configuration. Your chosen source is still copied exactly; selecting a vehicle type does not convert transmission-specific calibration or communication settings. Verify that your tune already suits this vehicle.</p>}
++      <label className="flex gap-3 text-sm"><input type="checkbox" checked={initializeAllBanks} disabled={busy || configuration === "automatic" || (sourceBank !== "" && sourceBank !== 1)} onChange={e => { setInitializeAllBanks(e.target.checked); setAcknowledged(false); }} />Initialize all three banks from the selected source (identical layouts and axes)</label>
++      <p className="text-sm opacity-80">{initializeAllBanks ? "Copies the complete selected bank's axes, maps and configuration while retaining selector identifiers. Its table sizes are preserved: copying an SG 9×9 or AG 9×8 Start IQ table does not resize it. Checksum validity does not prove correct ECU operation." : "Manual with CB1 source only: replaces CB2 and preserves the original CB3 layout and calibration."}</p>
++      <fieldset disabled={busy} className="space-y-3">
++        <legend className="font-medium mb-2">Map selector</legend>
++        <label className="flex gap-3"><input type="radio" name="multimap-selector" disabled={configuration === "automatic"} checked={selector === "cruise"} onChange={() => setSelector("cruise")} />Clutch + cruise SET</label>
++        <label className="flex gap-3"><input type="radio" name="multimap-selector" disabled={configuration === "automatic"} checked={selector === "brake"} onChange={() => setSelector("brake")} />Clutch + brake</label>
++        <label className="flex gap-3"><input type="radio" name="multimap-selector" checked={selector === "brakeCruise"} onChange={() => setSelector("brakeCruise")} />Brake + cruise SET</label>
++      </fieldset>
++      {selector === "brakeCruise" && <p role="status" className="text-sm text-amber-500">Experimental selector derived from the supplied manual firmware. It does not read the clutch input. Operation on manual and automatic vehicles has not been verified.</p>}
++      <p className="text-sm opacity-80">Use only with the engine stopped and ignition on: {selector === "brakeCruise" ? "hold the brake, then press and release cruise SET." : "hold the clutch, then press and release the selected control."} The tachometer temporarily indicates the selected bank. The correspondence between its 1,000/2,000/3,000 rpm indications and the editor's bank numbers requires verification for each profile.</p>
++      <p role="alert" className="text-sm text-amber-500">This beta selector has no explicit engine-off guard. Do not operate the selector while cranking or while the engine is running.</p>
++      <p className="text-sm opacity-80">All checksums are recalculated and verified. Files with different program code or an unsupported bank layout are refused. Vehicle operation has not been tested by ZedSuite.</p>
++      <label className="flex gap-3 text-sm"><input type="checkbox" checked={acknowledged} disabled={busy} onChange={e => setAcknowledged(e.target.checked)} />I confirm that the selected source contains the calibration I want to keep. I understand the other selected banks will be overwritten, all multimap support is experimental, and I use it at my own risk.</label>
++      <div className="flex justify-end gap-3"><Button variant="outline" disabled={busy} onClick={onClose}>Cancel</Button><Button disabled={busy || !acknowledged || !configuration || !sourceInfo} onClick={() => { if (configuration && sourceBank) void onApply(selector, initializeAllBanks, configuration, sourceBank); }}>{busy ? "Applying…" : "Apply beta multimap"}</Button></div>
++    </section>
++  </div>;
++}
+--- a/src/app/editor/page.tsx
++++ b/src/app/editor/page.tsx
+@@ -1,4 +1,7 @@
+ "use client";
++import { EcuCompatibilityModal } from "@/components/ecu-compatibility-modal";
++import { MultimapModal } from "@/components/multimap-modal";
++import { applyGN4308Multimap, buildMultimapVersionChanges, getMultimapSourceBanks, type MultimapSourceBank, type MultimapVehicleConfiguration, type MultimapSelector } from "@/lib/ecu/gn4308-multimap";
+ 
+ import { useEffect, useState, useRef, useCallback, useMemo, useDeferredValue } from "react";
+ import { useRouter } from "next/navigation";
+@@ -3485,7 +3488,7 @@
+   // applyEditsToFileData. L'ancien loadVersionData du CompareModal écrivait
+   // les valeurs AFFICHÉES telles quelles (sans correction_factor/offset ni
+   // dé-flip) → différences fausses ou nulles.
+-  const buildVersionFileData = useCallback(async (versionId: string): Promise<number[]> => {
++  const buildVersionFileData = useCallback(async (versionId: string, strict = false): Promise<number[]> => {
+     const original = originalFileDataRef.current ?? projectData?.file_data ?? [];
+     const version = versions.find(v => v.id === versionId);
+     if (!version || version.name === "Ori") return [...original];
+@@ -3498,7 +3501,8 @@
+           base = Array.from(disk);
+           versionFileDataRef.current.set(versionId, base);
+         }
+-      } catch {
++      } catch (error) {
++        if (strict) throw error;
+         // pas de binaire importé pour cette version
+       }
+     }
+@@ -3545,6 +3549,7 @@
+       });
+       applyEditsToFileData(data, mods, axisEdits, flips);
+     } catch (error) {
++      if (strict) throw error;
+       console.error("buildVersionFileData error", error);
+     }
+     return Array.from(data);
+@@ -6319,6 +6324,66 @@
+ 
+   // Menu du bouton Outils (sidebar dépliée ou repliée) : fermé au clic
+   // ailleurs ou à l'action choisie
++  const [isEcuCompatibilityOpen, setIsEcuCompatibilityOpen] = useState(false);
++  const [isMultimapOpen, setIsMultimapOpen] = useState(false);
++  const [multimapBusy, setMultimapBusy] = useState(false);
++  const [includeMultimapUnsavedEdits, setIncludeMultimapUnsavedEdits] = useState(true);
++  const [multimapWorkingData, setMultimapWorkingData] = useState<Uint8Array | null>(null);
++  const [multimapSavedData, setMultimapSavedData] = useState<Uint8Array | null>(null);
++  const multimapVersionBaseRef = useRef<Uint8Array | null>(null);
++  const openMultimap = async () => {
++    setToolsMenuOpen(false);
++    if (!currentVersionId || isOnOriVersion()) {
++      toast({ title: t.errors.oriVersionReadOnly, description: "Create and select a new version before applying multimap.", variant: "destructive" });
++      return;
++    }
++    setIncludeMultimapUnsavedEdits(true);
++    setMultimapWorkingData(null); setMultimapSavedData(null);
++    multimapVersionBaseRef.current = null;
++    setMultimapBusy(true); setIsMultimapOpen(true);
++    try {
++      if (isLoadingVersionRef.current) throw new Error("Wait for the selected version to finish loading, then open the tool again.");
++      const working = new Uint8Array(buildEditedFileData());
++      const saved = new Uint8Array(await buildVersionFileData(currentVersionId, true));
++      const rawBase = versionFileDataRef.current.get(currentVersionId) ?? originalFileDataRef.current;
++      if (!rawBase || rawBase.length !== saved.length) throw new Error("The saved version base could not be loaded.");
++      multimapVersionBaseRef.current = new Uint8Array(rawBase);
++      setMultimapSavedData(saved);
++      setMultimapWorkingData(working);
++    } catch (error) {
++      setIsMultimapOpen(false);
++      toast({ title: "Multimap not opened", description: error instanceof Error ? error.message : "The saved version could not be read.", variant: "destructive" });
++    } finally { setMultimapBusy(false); }
++  };
++  const applyMultimap = async (selector: MultimapSelector, initializeAllBanks: boolean, configuration: MultimapVehicleConfiguration, source: MultimapSourceBank) => {
++    if (!projectData || multimapBusy) return;
++    if (isOnOriVersion()) {
++      toast({ title: t.errors.oriVersionReadOnly, description: "Create and select a new version before applying multimap.", variant: "destructive" });
++      return;
++    }
++    setMultimapBusy(true);
++    try {
++      const selectedInput = includeMultimapUnsavedEdits ? multimapWorkingData : multimapSavedData;
++      const versionBase = multimapVersionBaseRef.current;
++      if (!selectedInput || !versionBase) throw new Error("Open the tool again to load the version data.");
++      const before = new Uint8Array(selectedInput);
++      const output = await applyGN4308Multimap(before, selector, initializeAllBanks, configuration, source);
++      const detectionResults = await detectMaps({ fileDataBase64: bytesToBase64(output), fileName: projectData.original_name || projectData.file_name || "multimap.bin", ecuType: projectData.ecu_type || undefined });
++      // Replace old working edits with a complete generated byte delta. Leaving
++      // stale cell/axis edits would write the old target tune over the clone.
++      setBinaryModifications(buildMultimapVersionChanges(versionBase, output));
++      setAllMapModifications(new Map());
++      setMapAxisLabels(new Map());
++      clearMapDataCache();
++      setOpenMaps([]);
++      setProjectData({ ...projectData, file_data: Array.from(output), detectionResults: stripSoiTag(detectionResults) });
++      setHasUnsavedChanges(true);
++      setIsMultimapOpen(false);
++      toast({ title: "Beta multimap applied", description: "Experimental conversion. All multimap support is in testing; use at your own risk. Save this version, then export the file." });
++    } catch (error) {
++      toast({ title: "Multimap not applied", description: error instanceof Error ? error.message : "Conversion failed.", variant: "destructive" });
++    } finally { setMultimapBusy(false); }
++  };
+   const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
+   const toolsMenuRef = useRef<HTMLDivElement | null>(null);
+   const toolsMenuCollapsedRef = useRef<HTMLDivElement | null>(null);
+@@ -6357,6 +6422,12 @@
+       >
+         <Timer className="w-4 h-4" />
+         <span>{t.eoiModal.title}</span>
++      </button>
++      <button type="button" onClick={() => { void openMultimap(); }} className={`w-full px-3 py-1.5 text-left text-sm rounded-md transition-colors ${getButtonHoverClass()}`}>
++        Multi-Map Beta
++      </button>
++      <button type="button" onClick={() => { setToolsMenuOpen(false); setIsEcuCompatibilityOpen(true); }} className={`w-full px-3 py-1.5 text-left text-sm rounded-md transition-colors ${getButtonHoverClass()}`}>
++        ECU Compatibility
+       </button>
+     </div>
+   );
+@@ -9055,6 +9126,8 @@
+       />
+ 
+       {/* Checksum Modal */}
++      {isEcuCompatibilityOpen && <EcuCompatibilityModal theme={theme} onClose={() => setIsEcuCompatibilityOpen(false)} />}
++      {isMultimapOpen && <MultimapModal theme={theme} busy={multimapBusy} sourceBanks={getMultimapSourceBanks((includeMultimapUnsavedEdits ? multimapWorkingData : multimapSavedData) ?? new Uint8Array())} includeUnsavedEdits={includeMultimapUnsavedEdits} onIncludeUnsavedChange={setIncludeMultimapUnsavedEdits} onClose={() => { if (!multimapBusy) setIsMultimapOpen(false); }} onApply={applyMultimap} />}
+       {isChecksumModalOpen && (
+         <ChecksumModal
+           onClose={closeChecksumModal}
+--- /dev/null
++++ b/src/components/ecu-compatibility-modal.tsx
+@@ -0,0 +1,64 @@
++"use client";
++
++import { useEffect, useRef, useState } from "react";
++import { Button } from "@/components/ui/button";
++import { getModalGlassStyle } from "@/lib/modal-glass";
++import { ECU_PROGRAM_GROUPS } from "@/lib/ecu/compatibility-reference";
++
++export function EcuCompatibilityModal({ theme, onClose }: {
++  theme: "default" | "light" | "oled"; onClose: () => void;
++}) {
++  const [query, setQuery] = useState("");
++  const dialogRef = useRef<HTMLDivElement>(null);
++  useEffect(() => {
++    const previousFocus = document.activeElement as HTMLElement | null;
++    dialogRef.current?.focus();
++    return () => previousFocus?.focus();
++  }, []);
++  const groups = ECU_PROGRAM_GROUPS.filter(group =>
++    `${group.id} ${group.identities} ${group.bankKiB}`.toLowerCase().includes(query.trim().toLowerCase()));
++  return <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
++    <div ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="ecu-compatibility-title"
++      className="w-full max-w-4xl max-h-[90vh] overflow-y-auto mx-4 rounded-lg border p-6 space-y-4"
++      style={{ ...getModalGlassStyle(theme), color: theme === "light" ? "black" : "white" }}
++      onClick={event => event.stopPropagation()} onKeyDown={event => {
++        if (event.key === "Escape") { event.stopPropagation(); onClose(); }
++        if (event.key === "Tab") {
++          const controls = dialogRef.current?.querySelectorAll<HTMLElement>("input, button");
++          if (!controls?.length) return;
++          const first = controls[0], last = controls[controls.length - 1];
++          if (event.shiftKey && (document.activeElement === first || document.activeElement === dialogRef.current)) {
++            event.preventDefault(); last.focus();
++          } else if (!event.shiftKey && document.activeElement === last) {
++            event.preventDefault(); first.focus();
++          }
++        }
++      }}>
++      <h2 id="ecu-compatibility-title" className="text-xl font-bold">ECU Compatibility</h2>
++      <p className="text-sm">Exact program groups from the inspected 90 hp TDI file collection. Software versions are shown in parentheses. This is a reference to compared files; matching program bytes or bank size does not establish that complete files, calibrations or vehicles are interchangeable.</p>
++      <label className="block text-sm">Find an ECU or group
++        <input value={query} onChange={event => setQuery(event.target.value)} placeholder="e.g. GN, 4307, P2"
++          className="mt-1 block w-full rounded-md border bg-transparent px-3 py-2" />
++      </label>
++      <div className="overflow-x-auto">
++        <table className="w-full text-sm text-left border-collapse">
++          <caption className="text-left font-semibold pb-2">Exact program groups</caption>
++          <thead><tr className="border-b"><th scope="col" className="p-2">Group</th><th scope="col" className="p-2">ECU identities and software</th><th scope="col" className="p-2">Bank layout</th><th scope="col" className="p-2">Multi-Map Beta</th></tr></thead>
++          <tbody>{groups.map(group => <tr key={group.id} className="border-b">
++            <th scope="row" className="p-2 align-top">{group.id}</th>
++            <td className="p-2">{group.identities}</td>
++            <td className="p-2 whitespace-nowrap">{group.bankKiB} KiB</td>
++            <td className="p-2">{group.id === "P1" ? "Inspected FD4102 / GN4308 / GQ4307 profiles only" : group.id === "P5" ? "GK KD34: separate experimental profile" : "Not supported"}</td>
++          </tr>)}</tbody>
++        </table>
++        {!groups.length && <p role="status" className="py-3 text-sm">No matching ECU in this reference.</p>}
++      </div>
++      <p className="text-sm">Bank layout is the observed spacing between calibration banks, not a guarantee of the number of occupied banks. The supported beta layouts use three 64 KiB slots: CB1 [0x4C000, 0x5C000), CB2 [0x5C000, 0x6C000), CB3 [0x6C000, 0x7C000). End addresses are excluded. Firmware validation also checks identities, program fingerprints and bank contents.</p>
++      <p className="text-sm">P1 shares the compared main program region; GK belongs to P5 and requires its own strategy. AJ 2829 and AJ 2707 belong to different groups. Other software revisions require separate verification.</p>
++      <p className="text-sm">Factory configuration markers in the inspected beta files: CB1 is SG (manual), CB3 is AG (automatic). GN/FD/GQ use bank IDs 2 and 1; GK uses 12 and 11. FD's occupied CB2 has ID 4 and is also marked AG. No verified 4×4 source bank was identified. Converted bank numbers are selector slots and do not identify a transmission.</p>
++      <p className="text-sm opacity-80">Reference: offline comparison dated 12 October 2026, 146 unique payloads from 120 archives. Main program comparison: [0x14000, 0x4BFFC) for 64 KiB layouts, [0x14000, 0x57FFC) for 48 KiB layouts. Identification and checksum areas were excluded. These grouping hashes differ from the stricter Multi-Map Beta fingerprints. Site labels do not establish stock provenance.</p>
++      <p role="note" className="text-sm text-amber-500">All Multi-Map Beta profiles remain in testing and are used at the user's own risk. This reference does not enable additional profiles or establish flash safety.</p>
++      <div className="flex justify-end"><Button onClick={onClose}>Close</Button></div>
++    </div>
++  </div>;
++}
+--- /dev/null
++++ b/src/lib/ecu/compatibility-reference.ts
+@@ -0,0 +1,58 @@
++// Offline reference for the inspected software versions only; not a flash-compatibility allowlist.
++export const ECU_PROGRAM_GROUPS = [
++  {
++    "id": "P1",
++    "identities": "038906012FD (4102); 038906012GN (4308); 038906012GQ (4307)",
++    "bankKiB": 64
++  },
++  {
++    "id": "P2",
++    "identities": "038906012F (3313, 3331); 038906012FH (3537); 038906012FN (3358); 038906012H (3315, 3332)",
++    "bankKiB": 64
++  },
++  {
++    "id": "P3",
++    "identities": "038906012AF (2825); 038906012AJ (2829); 038906012B (2802); 038906012C (2803); 038906012CP (2839); 038906012Q (2818)",
++    "bankKiB": 48
++  },
++  {
++    "id": "P4",
++    "identities": "038906012BD (2507); 038906012M (2528)",
++    "bankKiB": 48
++  },
++  {
++    "id": "P5",
++    "identities": "038906012GK (KD34)",
++    "bankKiB": 64
++  },
++  {
++    "id": "P6",
++    "identities": "038906019AB (1071)",
++    "bankKiB": 64
++  },
++  {
++    "id": "P7",
++    "identities": "038906019LP (1596)",
++    "bankKiB": 64
++  },
++  {
++    "id": "P8",
++    "identities": "038906012AJ (2707)",
++    "bankKiB": 48
++  },
++  {
++    "id": "P9",
++    "identities": "038906012S (2512)",
++    "bankKiB": 48
++  },
++  {
++    "id": "P10",
++    "identities": "038906012BS (2804); 038906012CA (2806)",
++    "bankKiB": 48
++  },
++  {
++    "id": "P11",
++    "identities": "038906012HA (4922)",
++    "bankKiB": 64
++  }
++] as const;

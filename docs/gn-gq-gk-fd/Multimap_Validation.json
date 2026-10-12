@@ -1,0 +1,1045 @@
+{
+  "scope": "Offline source-level validation, no ECU/vehicle execution",
+  "cases": [
+    {
+      "profile": "GN",
+      "selector": "cruise",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "selector": "cruise",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "selector": "brake",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "selector": "brake",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "selector": "brakeCruise",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "selector": "brakeCruise",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "selector": "cruise",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "selector": "cruise",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "selector": "brake",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "selector": "brake",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "selector": "brakeCruise",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "selector": "brakeCruise",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "selector": "cruise",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "selector": "cruise",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "selector": "brake",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "selector": "brake",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "selector": "brakeCruise",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "selector": "brakeCruise",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "selector": "cruise",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "selector": "cruise",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "selector": "brake",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "selector": "brake",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "selector": "brakeCruise",
+      "initializeAllBanks": false,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "selector": "brakeCruise",
+      "initializeAllBanks": true,
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    }
+  ],
+  "configurationCases": [
+    {
+      "profile": "GN",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 2,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x5ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 2,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x5ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 2,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x5ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 2,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x5ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 1,
+      "sourceMarker": "SG",
+      "tunedCellOffset": "0x4ce70",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "configuration": "manual",
+      "selector": "cruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "configuration": "manual",
+      "selector": "brake",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "configuration": "manual",
+      "selector": "brakeCruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "configuration": "automatic",
+      "selector": "brakeCruise",
+      "sourceBank": 3,
+      "sourceMarker": "AG",
+      "tunedCellOffset": "0x6ce6e",
+      "tunePreservation": "PASS",
+      "allSourceReinitializations": "PASS",
+      "checksums": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "result": "PASS"
+    }
+  ],
+  "configurationRejections": 43,
+  "savedWorkingCases": [
+    {
+      "profile": "GN",
+      "includeUnsavedEdits": false,
+      "savedTuneRetained": "PASS",
+      "targetEditDoesNotOverrideSource": "PASS",
+      "versionDeltaReplay": "PASS",
+      "importedVersionReplay": "PASS",
+      "result": "PASS"
+    },
+    {
+      "profile": "GN",
+      "includeUnsavedEdits": true,
+      "savedTuneRetained": "PASS",
+      "targetEditDoesNotOverrideSource": "PASS",
+      "versionDeltaReplay": "PASS",
+      "importedVersionReplay": "PASS",
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "includeUnsavedEdits": false,
+      "savedTuneRetained": "PASS",
+      "targetEditDoesNotOverrideSource": "PASS",
+      "versionDeltaReplay": "PASS",
+      "importedVersionReplay": "PASS",
+      "result": "PASS"
+    },
+    {
+      "profile": "FD",
+      "includeUnsavedEdits": true,
+      "savedTuneRetained": "PASS",
+      "targetEditDoesNotOverrideSource": "PASS",
+      "versionDeltaReplay": "PASS",
+      "importedVersionReplay": "PASS",
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "includeUnsavedEdits": false,
+      "savedTuneRetained": "PASS",
+      "targetEditDoesNotOverrideSource": "PASS",
+      "versionDeltaReplay": "PASS",
+      "importedVersionReplay": "PASS",
+      "result": "PASS"
+    },
+    {
+      "profile": "GQ",
+      "includeUnsavedEdits": true,
+      "savedTuneRetained": "PASS",
+      "targetEditDoesNotOverrideSource": "PASS",
+      "versionDeltaReplay": "PASS",
+      "importedVersionReplay": "PASS",
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "includeUnsavedEdits": false,
+      "savedTuneRetained": "PASS",
+      "targetEditDoesNotOverrideSource": "PASS",
+      "versionDeltaReplay": "PASS",
+      "importedVersionReplay": "PASS",
+      "result": "PASS"
+    },
+    {
+      "profile": "GK",
+      "includeUnsavedEdits": true,
+      "savedTuneRetained": "PASS",
+      "targetEditDoesNotOverrideSource": "PASS",
+      "versionDeltaReplay": "PASS",
+      "importedVersionReplay": "PASS",
+      "result": "PASS"
+    }
+  ],
+  "result": "PASS",
+  "conversionCases": 24,
+  "rejectionCases": 36
+}

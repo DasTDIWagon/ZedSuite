@@ -1,4 +1,7 @@
 "use client";
+import { EcuCompatibilityModal } from "@/components/ecu-compatibility-modal";
+import { MultimapModal } from "@/components/multimap-modal";
+import { applyGN4308Multimap, buildMultimapVersionChanges, getMultimapSourceBanks, type MultimapSourceBank, type MultimapVehicleConfiguration, type MultimapSelector } from "@/lib/ecu/gn4308-multimap";
 
 import { useEffect, useState, useRef, useCallback, useMemo, useDeferredValue } from "react";
 import { useRouter } from "next/navigation";
@@ -3485,7 +3488,7 @@ function EditorPageContent() {
   // applyEditsToFileData. L'ancien loadVersionData du CompareModal écrivait
   // les valeurs AFFICHÉES telles quelles (sans correction_factor/offset ni
   // dé-flip) → différences fausses ou nulles.
-  const buildVersionFileData = useCallback(async (versionId: string): Promise<number[]> => {
+  const buildVersionFileData = useCallback(async (versionId: string, strict = false): Promise<number[]> => {
     const original = originalFileDataRef.current ?? projectData?.file_data ?? [];
     const version = versions.find(v => v.id === versionId);
     if (!version || version.name === "Ori") return [...original];
@@ -3498,7 +3501,8 @@ function EditorPageContent() {
           base = Array.from(disk);
           versionFileDataRef.current.set(versionId, base);
         }
-      } catch {
+      } catch (error) {
+        if (strict) throw error;
         // pas de binaire importé pour cette version
       }
     }
@@ -3545,6 +3549,7 @@ function EditorPageContent() {
       });
       applyEditsToFileData(data, mods, axisEdits, flips);
     } catch (error) {
+      if (strict) throw error;
       console.error("buildVersionFileData error", error);
     }
     return Array.from(data);
@@ -6319,6 +6324,66 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
 
   // Menu du bouton Outils (sidebar dépliée ou repliée) : fermé au clic
   // ailleurs ou à l'action choisie
+  const [isEcuCompatibilityOpen, setIsEcuCompatibilityOpen] = useState(false);
+  const [isMultimapOpen, setIsMultimapOpen] = useState(false);
+  const [multimapBusy, setMultimapBusy] = useState(false);
+  const [includeMultimapUnsavedEdits, setIncludeMultimapUnsavedEdits] = useState(true);
+  const [multimapWorkingData, setMultimapWorkingData] = useState<Uint8Array | null>(null);
+  const [multimapSavedData, setMultimapSavedData] = useState<Uint8Array | null>(null);
+  const multimapVersionBaseRef = useRef<Uint8Array | null>(null);
+  const openMultimap = async () => {
+    setToolsMenuOpen(false);
+    if (!currentVersionId || isOnOriVersion()) {
+      toast({ title: t.errors.oriVersionReadOnly, description: "Create and select a new version before applying multimap.", variant: "destructive" });
+      return;
+    }
+    setIncludeMultimapUnsavedEdits(true);
+    setMultimapWorkingData(null); setMultimapSavedData(null);
+    multimapVersionBaseRef.current = null;
+    setMultimapBusy(true); setIsMultimapOpen(true);
+    try {
+      if (isLoadingVersionRef.current) throw new Error("Wait for the selected version to finish loading, then open the tool again.");
+      const working = new Uint8Array(buildEditedFileData());
+      const saved = new Uint8Array(await buildVersionFileData(currentVersionId, true));
+      const rawBase = versionFileDataRef.current.get(currentVersionId) ?? originalFileDataRef.current;
+      if (!rawBase || rawBase.length !== saved.length) throw new Error("The saved version base could not be loaded.");
+      multimapVersionBaseRef.current = new Uint8Array(rawBase);
+      setMultimapSavedData(saved);
+      setMultimapWorkingData(working);
+    } catch (error) {
+      setIsMultimapOpen(false);
+      toast({ title: "Multimap not opened", description: error instanceof Error ? error.message : "The saved version could not be read.", variant: "destructive" });
+    } finally { setMultimapBusy(false); }
+  };
+  const applyMultimap = async (selector: MultimapSelector, initializeAllBanks: boolean, configuration: MultimapVehicleConfiguration, source: MultimapSourceBank) => {
+    if (!projectData || multimapBusy) return;
+    if (isOnOriVersion()) {
+      toast({ title: t.errors.oriVersionReadOnly, description: "Create and select a new version before applying multimap.", variant: "destructive" });
+      return;
+    }
+    setMultimapBusy(true);
+    try {
+      const selectedInput = includeMultimapUnsavedEdits ? multimapWorkingData : multimapSavedData;
+      const versionBase = multimapVersionBaseRef.current;
+      if (!selectedInput || !versionBase) throw new Error("Open the tool again to load the version data.");
+      const before = new Uint8Array(selectedInput);
+      const output = await applyGN4308Multimap(before, selector, initializeAllBanks, configuration, source);
+      const detectionResults = await detectMaps({ fileDataBase64: bytesToBase64(output), fileName: projectData.original_name || projectData.file_name || "multimap.bin", ecuType: projectData.ecu_type || undefined });
+      // Replace old working edits with a complete generated byte delta. Leaving
+      // stale cell/axis edits would write the old target tune over the clone.
+      setBinaryModifications(buildMultimapVersionChanges(versionBase, output));
+      setAllMapModifications(new Map());
+      setMapAxisLabels(new Map());
+      clearMapDataCache();
+      setOpenMaps([]);
+      setProjectData({ ...projectData, file_data: Array.from(output), detectionResults: stripSoiTag(detectionResults) });
+      setHasUnsavedChanges(true);
+      setIsMultimapOpen(false);
+      toast({ title: "Beta multimap applied", description: "Experimental conversion. All multimap support is in testing; use at your own risk. Save this version, then export the file." });
+    } catch (error) {
+      toast({ title: "Multimap not applied", description: error instanceof Error ? error.message : "Conversion failed.", variant: "destructive" });
+    } finally { setMultimapBusy(false); }
+  };
   const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
   const toolsMenuRef = useRef<HTMLDivElement | null>(null);
   const toolsMenuCollapsedRef = useRef<HTMLDivElement | null>(null);
@@ -6357,6 +6422,12 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
       >
         <Timer className="w-4 h-4" />
         <span>{t.eoiModal.title}</span>
+      </button>
+      <button type="button" onClick={() => { void openMultimap(); }} className={`w-full px-3 py-1.5 text-left text-sm rounded-md transition-colors ${getButtonHoverClass()}`}>
+        Multi-Map Beta
+      </button>
+      <button type="button" onClick={() => { setToolsMenuOpen(false); setIsEcuCompatibilityOpen(true); }} className={`w-full px-3 py-1.5 text-left text-sm rounded-md transition-colors ${getButtonHoverClass()}`}>
+        ECU Compatibility
       </button>
     </div>
   );
@@ -9055,6 +9126,8 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
       />
 
       {/* Checksum Modal */}
+      {isEcuCompatibilityOpen && <EcuCompatibilityModal theme={theme} onClose={() => setIsEcuCompatibilityOpen(false)} />}
+      {isMultimapOpen && <MultimapModal theme={theme} busy={multimapBusy} sourceBanks={getMultimapSourceBanks((includeMultimapUnsavedEdits ? multimapWorkingData : multimapSavedData) ?? new Uint8Array())} includeUnsavedEdits={includeMultimapUnsavedEdits} onIncludeUnsavedChange={setIncludeMultimapUnsavedEdits} onClose={() => { if (!multimapBusy) setIsMultimapOpen(false); }} onApply={applyMultimap} />}
       {isChecksumModalOpen && (
         <ChecksumModal
           onClose={closeChecksumModal}

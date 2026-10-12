@@ -1,0 +1,47 @@
+{
+  "upstream_commit": "77d75fb9e28df04379fd6d1912197947f1cce0c0",
+  "upstream_version": "1.2.6",
+  "detector_revision": 52,
+  "files": [
+    {
+      "path": "src-tauri/src/detector/ecu/bosch/edc15vm/mod.rs",
+      "baseline_git_blob": "7a8bc89f0c4c3bafd9c4ef7f23757f5c3d6f4f7a",
+      "updated_sha256": "d183d36730eb3ae0788dfda48b068dae33a565128f7d056a384183adaa623107"
+    },
+    {
+      "path": "src-tauri/src/detector/mod.rs",
+      "baseline_git_blob": "981edae2b4644027f73940f62392ab90d01a6250",
+      "updated_sha256": "bf2c47a33d889e59e6cfd0527a8d048dfa85054297c98424e7132d3041905457"
+    },
+    {
+      "path": "src-tauri/src/commands.rs",
+      "baseline_git_blob": "553be4859578b77360d00d34f19eb01223f8821c",
+      "updated_sha256": "e2d9220dd95aea56da99ed1c7eac0c6e2b4770f13de3051d1f6b768f32c9e6c8"
+    },
+    {
+      "path": "src/lib/ecu/gn4308-multimap.ts",
+      "baseline_git_blob": null,
+      "updated_sha256": "8e284aa90f747647f8de98beb113d369695d2a0a604ff41097dd9612e50f3db6"
+    },
+    {
+      "path": "src/components/multimap-modal.tsx",
+      "baseline_git_blob": null,
+      "updated_sha256": "753cdac47ba1a93ddfa5d1b7d713556dbe7a7192ad8389bd04c96d05ce2d3666"
+    },
+    {
+      "path": "src/app/editor/page.tsx",
+      "baseline_git_blob": "bae422323e73ed53a7c68e9596d48a71d2ae4a86",
+      "updated_sha256": "88ce14f67db12a34e254b03373481cd36ec472d582a4455458ca1a7f16c475d7"
+    },
+    {
+      "path": "src/components/ecu-compatibility-modal.tsx",
+      "baseline_git_blob": null,
+      "updated_sha256": "a1b6177ef03f437ebdc674fa0bb4e326daa6bc5906390db2436a737b2412c2bd"
+    },
+    {
+      "path": "src/lib/ecu/compatibility-reference.ts",
+      "baseline_git_blob": null,
+      "updated_sha256": "87b1e75a81a62b2ba692df678c7bb269662d9a3164df34e4a20de57781d3f4ec"
+    }
+  ]
+}
