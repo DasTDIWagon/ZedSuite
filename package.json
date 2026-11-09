@@ -11,7 +11,9 @@
     "tauri": "tauri",
     "app:dev": "tauri dev",
     "app:build": "tauri build",
-    "clean": "rm -rf .next out node_modules"
+    "clean": "rm -rf .next out node_modules",
+    "test:bank-copy": "node tests/soi-axis-banks.cjs && node tests/map-bank-copy.cjs && node tests/soi-bank-switch.cjs",
+    "test:map-sensor": "node tests/map-sensor.cjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.2",

@@ -1,0 +1,1047 @@
+[
+  {
+    "ecu": "038906012FD",
+    "software": "4102",
+    "group": "P1",
+    "filename": "P1/038906012FD_4102.bin",
+    "sha256": "a7990b5dc1a9161ab2d3b5a021a48f0fcfcd49046eebf302e667f3cbb7a6a17d",
+    "archive_name": "VW Bora 1.9TDI AGR 90HP 038906012FD 0281010653 362774.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20Bora%201.9TDI%20AGR%2090HP%20038906012FD%200281010653%20362774.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 346606,
+        "header": "0xdc9c",
+        "axis_offset": 346610,
+        "pressure_offset": 346614,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 412142,
+        "header": "0xdc9c",
+        "axis_offset": 412146,
+        "pressure_offset": 412150,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 477678,
+        "header": "0xdc9c",
+        "axis_offset": 477682,
+        "pressure_offset": 477686,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012GN",
+    "software": "4308",
+    "group": "P1",
+    "filename": "P1/038906012GN_4308.bin",
+    "sha256": "d7b4f0a6a2163a7b3330e1a42a59ad3e296b9c4152b25dee72f0ccbe80df9d6e",
+    "archive_name": "VW GolfJetta 1.9TDI ALH 90HP 038906012GN 0281011034 366234.rar",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20GolfJetta%201.9TDI%20ALH%2090HP%20038906012GN%200281011034%20366234.rar",
+    "inspected_curves": [
+      {
+        "header_offset": 346606,
+        "header": "0xdc9c",
+        "axis_offset": 346610,
+        "pressure_offset": 346614,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 477678,
+        "header": "0xdc9c",
+        "axis_offset": 477682,
+        "pressure_offset": 477686,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012GQ",
+    "software": "4307",
+    "group": "P1",
+    "filename": "P1/038906012GQ_4307.bin",
+    "sha256": "8f0969ce89dce9ba4b883ff5a12840928915e3a71b156a452b7458d5422f93a1",
+    "archive_name": "VW Beetle 1.9TDI 5spd ALH 90HP 038906012GQ 0281011035 366235.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20Beetle%201.9TDI%205spd%20ALH%2090HP%20038906012GQ%200281011035%20366235.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 346606,
+        "header": "0xdc9c",
+        "axis_offset": 346610,
+        "pressure_offset": 346614,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 477678,
+        "header": "0xdc9c",
+        "axis_offset": 477682,
+        "pressure_offset": 477686,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012F",
+    "software": "3313",
+    "group": "P2",
+    "filename": "P2/038906012F_3313.bin",
+    "sha256": "5ba4b45861d1f1d2be33af2cc35dd5428b3656499d6c8545d3b316bdfc80d77b",
+    "archive_name": "Skoda octavia 1.9TDI 90HP 038906012F 0281010127 350855.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_skoda/Skoda%20octavia%201.9TDI%2090HP%20038906012F%200281010127%20350855.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 345610,
+        "header": "0xdd28",
+        "axis_offset": 345614,
+        "pressure_offset": 345618,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 411146,
+        "header": "0xdd28",
+        "axis_offset": 411150,
+        "pressure_offset": 411154,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 476682,
+        "header": "0xdd28",
+        "axis_offset": 476686,
+        "pressure_offset": 476690,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012F",
+    "software": "3331",
+    "group": "P2",
+    "filename": "P2/038906012F_3331.bin",
+    "sha256": "121a36d15ff7337637b30977d281faeac985ac5191dfde5e42244388662ecc04",
+    "archive_name": "Skoda octavia 1.9TDI 90HP 038906012F 0281010127 360546(1).zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_skoda/Skoda%20octavia%201.9TDI%2090HP%20038906012F%200281010127%20360546%281%29.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 345610,
+        "header": "0xdd28",
+        "axis_offset": 345614,
+        "pressure_offset": 345618,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 411146,
+        "header": "0xdd28",
+        "axis_offset": 411150,
+        "pressure_offset": 411154,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 476682,
+        "header": "0xdd28",
+        "axis_offset": 476686,
+        "pressure_offset": 476690,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012FH",
+    "software": "3537",
+    "group": "P2",
+    "filename": "P2/038906012FH_3537.bin",
+    "sha256": "3fd6248094cadf348c895d99933d238c23d997162f6594f67afbd9b69261ea52",
+    "archive_name": "VW beetle 1.9TDI ALH 90HP 038906012FH 0281010657 362437.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20beetle%201.9TDI%20ALH%2090HP%20038906012FH%200281010657%20362437.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 345610,
+        "header": "0xdd28",
+        "axis_offset": 345614,
+        "pressure_offset": 345618,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 476682,
+        "header": "0xdd28",
+        "axis_offset": 476686,
+        "pressure_offset": 476690,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012FN",
+    "software": "3358",
+    "group": "P2",
+    "filename": "P2/038906012FN_3358.bin",
+    "sha256": "2a6950f28488bfd80044052e14bdeede016330fc2ed385772e35dd0747301394",
+    "archive_name": "Seat leon 1.9TDI ALH 90HP 038906012FN 0281010686 360533.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_seat/Seat%20leon%201.9TDI%20ALH%2090HP%20038906012FN%200281010686%20360533.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 345610,
+        "header": "0xdd28",
+        "axis_offset": 345614,
+        "pressure_offset": 345618,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 476682,
+        "header": "0xdd28",
+        "axis_offset": 476686,
+        "pressure_offset": 476690,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012H",
+    "software": "3315",
+    "group": "P2",
+    "filename": "P2/038906012H_3315.bin",
+    "sha256": "47a054583a69be3865a077f12a52976b7213ceb5ca841b2a5bb7b83808c7ce37",
+    "archive_name": "Skoda octavia 1.9TDI AGR 90HP 038906012H 0281010129 350857.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_skoda/Skoda%20octavia%201.9TDI%20AGR%2090HP%20038906012H%200281010129%20350857.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 345610,
+        "header": "0xdd28",
+        "axis_offset": 345614,
+        "pressure_offset": 345618,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 411146,
+        "header": "0xdd28",
+        "axis_offset": 411150,
+        "pressure_offset": 411154,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 476682,
+        "header": "0xdd28",
+        "axis_offset": 476686,
+        "pressure_offset": 476690,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012H",
+    "software": "3332",
+    "group": "P2",
+    "filename": "P2/038906012H_3332.bin",
+    "sha256": "7d9acb21f593ca11724919e7378ff4c2c00ce32b1b1d488f872ca9f6bae643e7",
+    "archive_name": "Skoda oktavia 1.9TDI AGR 90HP 038906012H 02810101291037360547.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_skoda/Skoda%20oktavia%201.9TDI%20AGR%2090HP%20038906012H%2002810101291037360547.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 345610,
+        "header": "0xdd28",
+        "axis_offset": 345614,
+        "pressure_offset": 345618,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 411146,
+        "header": "0xdd28",
+        "axis_offset": 411150,
+        "pressure_offset": 411154,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 476682,
+        "header": "0xdd28",
+        "axis_offset": 476686,
+        "pressure_offset": 476690,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012AF",
+    "software": "2825",
+    "group": "P3",
+    "filename": "P3/038906012AF_2825.bin",
+    "sha256": "a608282f32486e1f45605c7e3889d80ab45337104914e2220a5794f3e8549529",
+    "archive_name": "Audi_A4_1.9TDI_90HP_0281010197_038906012AF_352621.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_audi/Audi_A4_1.9TDI_90HP_0281010197_038906012AF_352621.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 396196,
+        "header": "0xdcd4",
+        "axis_offset": 396200,
+        "pressure_offset": 396204,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494500,
+        "header": "0xdcd4",
+        "axis_offset": 494504,
+        "pressure_offset": 494508,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012AJ",
+    "software": "2829",
+    "group": "P3",
+    "filename": "P3/038906012AJ_2829.bin",
+    "sha256": "4a2fd6df0f9f0187bf9edb94ff283a90428cd9f20b44f29748519e41fd84d3cf",
+    "archive_name": "Audi A4 1.9TDI AHH 90HP 038906012AJ 0281010202 352625.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_audi/Audi%20A4%201.9TDI%20AHH%2090HP%20038906012AJ%200281010202%20352625.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 396196,
+        "header": "0xdcd4",
+        "axis_offset": 396200,
+        "pressure_offset": 396204,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494500,
+        "header": "0xdcd4",
+        "axis_offset": 494504,
+        "pressure_offset": 494508,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012B",
+    "software": "2802",
+    "group": "P3",
+    "filename": "P3/038906012B_2802.bin",
+    "sha256": "82452f5d9e2b1c1ff69db1d4d3ccdfee90300e85aae56261b808c598ff1dcf91",
+    "archive_name": "Audi_A3_1.9TDI_90HP_038906012B_0281010121_350849_2802.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_audi/Audi_A3_1.9TDI_90HP_038906012B_0281010121_350849_2802.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 396196,
+        "header": "0xdcd4",
+        "axis_offset": 396200,
+        "pressure_offset": 396204,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494500,
+        "header": "0xdcd4",
+        "axis_offset": 494504,
+        "pressure_offset": 494508,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012C",
+    "software": "2803",
+    "group": "P3",
+    "filename": "P3/038906012C_2803.bin",
+    "sha256": "1a943cfa95665b406682b58d615f74f8240f1e44726f46b1635c70a932711560",
+    "archive_name": "audi_a3_19tdi_90hp_038906012c_0281010122_1037350850_534.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_audi/audi_a3_19tdi_90hp_038906012c_0281010122_1037350850_534.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 396196,
+        "header": "0xdcd4",
+        "axis_offset": 396200,
+        "pressure_offset": 396204,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494500,
+        "header": "0xdcd4",
+        "axis_offset": 494504,
+        "pressure_offset": 494508,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012CP",
+    "software": "2839",
+    "group": "P3",
+    "filename": "P3/038906012CP_2839.bin",
+    "sha256": "bc90eeb7f7c92b67f13f5464c824618c8ca2c76756540cc6fd69f2b231f83b61",
+    "archive_name": "VW GolfJetta 1.9TDI ALH 90HP 038906012CP 0281010385.rar",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20GolfJetta%201.9TDI%20ALH%2090HP%20038906012CP%200281010385.rar",
+    "inspected_curves": [
+      {
+        "header_offset": 396196,
+        "header": "0xdcd4",
+        "axis_offset": 396200,
+        "pressure_offset": 396204,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 445348,
+        "header": "0xdcd4",
+        "axis_offset": 445352,
+        "pressure_offset": 445356,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494500,
+        "header": "0xdcd4",
+        "axis_offset": 494504,
+        "pressure_offset": 494508,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012Q",
+    "software": "2818",
+    "group": "P3",
+    "filename": "P3/038906012Q_2818.bin",
+    "sha256": "09d0ddaf0f132639d3a9f590152981c57826c4c2f6295840d6a99925a891c6a5",
+    "archive_name": "VW beetle 1.9TDI ALH 90HP 038906012Q 0281010133 352571.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20beetle%201.9TDI%20ALH%2090HP%20038906012Q%200281010133%20352571.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 396196,
+        "header": "0xdcd4",
+        "axis_offset": 396200,
+        "pressure_offset": 396204,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494500,
+        "header": "0xdcd4",
+        "axis_offset": 494504,
+        "pressure_offset": 494508,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012BD",
+    "software": "2507",
+    "group": "P4",
+    "filename": "P4/038906012BD_2507.bin",
+    "sha256": "07d2a40baed3c2f810861f68a45ee2626d1a5b7093be88afc83a1adeeb17ca26",
+    "archive_name": "VW GolfJetta 1.9TDI ALH 90HP 038906012BD 0281010124.rar",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20GolfJetta%201.9TDI%20ALH%2090HP%20038906012BD%200281010124.rar",
+    "inspected_curves": [
+      {
+        "header_offset": 395890,
+        "header": "0xdcd4",
+        "axis_offset": 395894,
+        "pressure_offset": 395898,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 445042,
+        "header": "0xdcd4",
+        "axis_offset": 445046,
+        "pressure_offset": 445050,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494194,
+        "header": "0xdcd4",
+        "axis_offset": 494198,
+        "pressure_offset": 494202,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012M",
+    "software": "2528",
+    "group": "P4",
+    "filename": "P4/038906012M_2528.bin",
+    "sha256": "494d1f983e3c2c2386099fecd96f9940049bf22bfb759f8efc2191690ceec1ce",
+    "archive_name": "VW golf 1.9TDI ALH 90HP 0281001979 038906012M 352564.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20golf%201.9TDI%20ALH%2090HP%200281001979%20038906012M%20352564.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 395890,
+        "header": "0xdcd4",
+        "axis_offset": 395894,
+        "pressure_offset": 395898,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494194,
+        "header": "0xdcd4",
+        "axis_offset": 494198,
+        "pressure_offset": 494202,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012GK",
+    "software": "KD34",
+    "group": "P5",
+    "filename": "P5/038906012GK_KD34.bin",
+    "sha256": "499d0831dd0743d1bce4767488ba3e58910f507d0b843ad32178562580b02f85",
+    "archive_name": "VW golf 1.9TDI ALH 90HP 038906012GK 0281010864 362681.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20golf%201.9TDI%20ALH%2090HP%20038906012GK%200281010864%20362681.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 346600,
+        "header": "0xdc9e",
+        "axis_offset": 346604,
+        "pressure_offset": 346608,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 477672,
+        "header": "0xdc9e",
+        "axis_offset": 477676,
+        "pressure_offset": 477680,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906019AB",
+    "software": "1071",
+    "group": "P6",
+    "filename": "P6/038906019AB_1071.bin",
+    "sha256": "244a97ac2853149f8560d870f9fc9dc31b17be65807ce27e0fa5d37ae39fa593",
+    "archive_name": "VW sharan 1.9TDI ANU 90HP 038906019AB 0281001865 354276.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20sharan%201.9TDI%20ANU%2090HP%20038906019AB%200281001865%20354276.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 492806,
+        "header": "0xe9bc",
+        "axis_offset": 492810,
+        "pressure_offset": 492814,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906019LP",
+    "software": "1596",
+    "group": "P7",
+    "filename": "P7/038906019LP_1596.bin",
+    "sha256": "9feabb3471955db0018af9ab6dbbb23dcd28f9580f5be2b4e1c83fde7d05a47b",
+    "archive_name": "VW sharan 1.9TDI ANU 90HP 038906019LP 0281011196 367003.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_volkswagen/VW%20sharan%201.9TDI%20ANU%2090HP%20038906019LP%200281011196%20367003.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 455796,
+        "header": "0xeba2",
+        "axis_offset": 455800,
+        "pressure_offset": 455804,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012AJ",
+    "software": "2707",
+    "group": "P8",
+    "filename": "P8/038906012AJ_2707.bin",
+    "sha256": "adede67734b52fbbffabad8565d2474ecc075cfc5279639fdf1114768f26417d",
+    "archive_name": "Audi A4 1.9TDI AHH 90HP 038906012AJ 0281010202 352257.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_audi/Audi%20A4%201.9TDI%20AHH%2090HP%20038906012AJ%200281010202%20352257.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 395890,
+        "header": "0xdcd4",
+        "axis_offset": 395894,
+        "pressure_offset": 395898,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494194,
+        "header": "0xdcd4",
+        "axis_offset": 494198,
+        "pressure_offset": 494202,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012S",
+    "software": "2512",
+    "group": "P9",
+    "filename": "P9/038906012S_2512.bin",
+    "sha256": "0fdf52cabe3df96d3bf0298b72fa4bed343398324767dd462c0f54c14ed65c6e",
+    "archive_name": "Seat toledo 1.9TDI AGR 90HP 038906012S 0281010059 359845.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_seat/Seat%20toledo%201.9TDI%20AGR%2090HP%20038906012S%200281010059%20359845.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 395890,
+        "header": "0xdcd4",
+        "axis_offset": 395894,
+        "pressure_offset": 395898,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494194,
+        "header": "0xdcd4",
+        "axis_offset": 494198,
+        "pressure_offset": 494202,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012BS",
+    "software": "2804",
+    "group": "P10",
+    "filename": "P10/038906012BS_2804.bin",
+    "sha256": "78cc9639041f189d529859876b4f8cc863d98689c23391c07a902fd1e4f1af09",
+    "archive_name": "Seat toledo 1.9TDI AGR 90HP 038906021BS 0281010228 352278.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_seat/Seat%20toledo%201.9TDI%20AGR%2090HP%20038906021BS%200281010228%20352278.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 396196,
+        "header": "0xdcd4",
+        "axis_offset": 396200,
+        "pressure_offset": 396204,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494500,
+        "header": "0xdcd4",
+        "axis_offset": 494504,
+        "pressure_offset": 494508,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012CA",
+    "software": "2806",
+    "group": "P10",
+    "filename": "P10/038906012CA_2806.bin",
+    "sha256": "475aa35b3b08f1311c1d10ac60b156b01508ecdd4ab71bc8653e7640f03c268f",
+    "archive_name": "Seat toledo 1.9TDI ALH 90HP 038906012CA 0281001230 352280.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_seat/Seat%20toledo%201.9TDI%20ALH%2090HP%20038906012CA%200281001230%20352280.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 396196,
+        "header": "0xdcd4",
+        "axis_offset": 396200,
+        "pressure_offset": 396204,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 494500,
+        "header": "0xdcd4",
+        "axis_offset": 494504,
+        "pressure_offset": 494508,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  },
+  {
+    "ecu": "038906012HA",
+    "software": "4922",
+    "group": "P11",
+    "filename": "P11/038906012HA_4922.bin",
+    "sha256": "ce551cb29d32d31696fa9ef7e0417a65b9973d9649d17bd83dfffd52d3c433ce",
+    "archive_name": "Skoda octavia 1.9TDI 90HP 038906012HA 0281011309 367046.zip",
+    "github_archive": "https://github.com/darkenSVK/chiptuning.pw_ecu-backup/blob/988763ca581c76104c1b71f0ba863529767f928d/ecu_files_skoda/Skoda%20octavia%201.9TDI%2090HP%20038906012HA%200281011309%20367046.zip",
+    "inspected_curves": [
+      {
+        "header_offset": 346750,
+        "header": "0xeb22",
+        "axis_offset": 346754,
+        "pressure_offset": 346758,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      },
+      {
+        "header_offset": 477822,
+        "header": "0xeb22",
+        "axis_offset": 477826,
+        "pressure_offset": 477830,
+        "adc": [
+          82,
+          989
+        ],
+        "pressure_mbar": [
+          200,
+          2600
+        ]
+      }
+    ]
+  }
+]

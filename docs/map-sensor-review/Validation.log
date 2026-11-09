@@ -1,0 +1,19 @@
+Validation run, 2026-11-09
+
+PASS 25 input SHA-256 checks against the recovered reference inventory.
+PASS 25 source archive Git blob hashes against darkenSVK/chiptuning.pw_ecu-backup commit 988763ca581c76104c1b71f0ba863529767f928d.
+PASS 55/55 stock curve records: ADC [82,989] -> [200,2600] mbar absolute.
+PASS 180 real-file cases (75 all-bank presets, 55 individual-bank cases, 50 independent-section cases).
+PASS selected preset values and repeated detection after changes.
+PASS only planned calibration bytes change before correction.
+PASS checksum corrections touch only populated checksum storage entries for the selected method.
+PASS restoring stock yields the exact original BIN, before and after checksum correction.
+PASS 23 MAP calibration regression checks.
+PASS 3 standalone checksum layout regression checks.
+PASS 26 bank-copy and control checks.
+PASS TypeScript noEmit.
+PASS Next.js frontend production export.
+PASS Tauri Windows debug native build (existing compiler warnings).
+PASS cargo test --manifest-path src-tauri/Cargo.toml --lib: 66 passed, 0 failed.
+
+No final interactive GUI/vehicle test; no ECU input binaries uploaded or modified.

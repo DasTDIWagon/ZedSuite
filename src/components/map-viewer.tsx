@@ -10,6 +10,7 @@ import { useI18n } from "@/contexts/i18n-context";
 import { PromptModal } from "@/components/prompt-modal";
 import { isBigEndianEcu, hasUnsignedAxes } from "@/lib/ecu-endianness";
 import { resolveMapCellLayout, resolveAxisLabels, resolveAxisSources } from "@/lib/map-cell-layout";
+import type { BankCopyOptions } from "@/lib/map-bank-edits";
 import { getMapValueRange, clampMapValue } from "@/lib/map-value-range";
 import { gridToText, parseGridText } from "@/lib/clipboard-grid";
 import { readSystemClipboardText, writeSystemClipboardText } from "@/lib/system-clipboard";
@@ -463,6 +464,9 @@ interface MapViewerProps {
    *  garde alors sa taille et ignore la taille calculée à l'ouverture) */
   userSized?: boolean;
   onAxisLabelsChange?: (axes: { x?: string[]; y?: string[] }) => void;
+  bankCopyOptions?: BankCopyOptions;
+  otherBankCount?: number;
+  onBankCopyOptionsChange?: (options: BankCopyOptions) => void;
   // Tells the parent how display row/col indices map back to file row/col, so
   // exports can write modified cells to the correct byte offsets.
   onAxesFlipChange?: (mapAddress: number, flip: { rowsReversed: boolean; colsReversed: boolean }) => void;
@@ -567,6 +571,9 @@ export function MapViewer({
   initialYAxisLabels,
   userSized = false,
   onAxisLabelsChange,
+  bankCopyOptions = { x: false, y: false, values: false },
+  otherBankCount = 0,
+  onBankCopyOptionsChange,
   onAxesFlipChange,
   theme: themeProp,
   onResizeActiveChange,
@@ -595,6 +602,40 @@ export function MapViewer({
   const displaySettingsSig = JSON.stringify(displaySettingsProp ?? null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const displaySettings = useMemo(() => displaySettingsProp, [displaySettingsSig]);
+  const renderBankCopySwitches = () => {
+    if (!onBankCopyOptionsChange || mapData.codeblock_id == null || mapData.external_source) return null;
+    const sources = resolveAxisSources(mapData);
+    const size = mapData.size / Math.max(1, resolveMapCellLayout(mapData).apiRows * resolveMapCellLayout(mapData).apiCols);
+    const controls: { label: string; key: keyof BankCopyOptions; available: boolean }[] = [
+      { label: 'X-axis', key: displayTransposed ? 'y' : 'x', available: !!sources[displayTransposed ? 'y' : 'x'].address },
+      { label: 'Y-axis', key: displayTransposed ? 'x' : 'y', available: !!sources[displayTransposed ? 'x' : 'y'].address },
+      { label: 'Table values', key: 'values', available: size === 1 || size === 2 },
+    ];
+    return (
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pr-8 py-1 text-[11px] cursor-default"
+        style={{ color: themeProp === 'light' ? '#374151' : '#d1d5db' }}
+        onMouseDown={e => e.stopPropagation()} onContextMenu={e => e.stopPropagation()}>
+        <span>Copy future edits to other banks:</span>
+        {controls.map(control => {
+          const disabled = !control.available || otherBankCount === 0;
+          const checked = bankCopyOptions[control.key];
+          return (
+            <button key={control.key} type="button" role="switch" aria-checked={checked}
+              disabled={disabled} aria-label={`Copy ${control.label.toLowerCase()} edits to other banks`}
+              title={disabled ? 'No compatible counterpart or editable data available' : 'Copies only future changes; turning off does not undo copied edits'}
+              className="inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+              onClick={() => onBankCopyOptionsChange({ ...bankCopyOptions, [control.key]: !checked })}>
+              <span className={`relative inline-flex h-4 w-7 shrink-0 rounded-full transition-colors ${checked ? 'bg-orange-600' : 'bg-gray-600'}`}>
+                <span className={`absolute top-0.5 h-3 w-3 rounded-full bg-white transition-transform ${checked ? 'translate-x-3.5' : 'translate-x-0.5'}`} />
+              </span>
+              {control.label}
+            </button>
+          );
+        })}
+        <span className="opacity-70">{otherBankCount} matching {otherBankCount === 1 ? 'bank' : 'banks'}. Shared axes still change together.</span>
+      </div>
+    );
+  };
   // Use controlled viewMode if provided, otherwise use internal state
   const [internalViewMode, setInternalViewMode] = useState<ViewMode>("text");
   const viewMode = controlledViewMode ?? internalViewMode;
@@ -4125,6 +4166,7 @@ const [axesSwapped, setAxesSwapped] = useState<boolean>(false); // Track if axes
             </button>
           )}
         </div>
+        {renderBankCopySwitches()}
         {mapData.description && (
           <p className="text-[11px] mt-0.5 truncate pr-8" style={{ color: theme === 'light' ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)' }}>{cleanDescription(mapData.description)}</p>
         )}
@@ -4420,6 +4462,7 @@ const [axesSwapped, setAxesSwapped] = useState<boolean>(false); // Track if axes
             </button>
           )}
         </div>
+        {renderBankCopySwitches()}
         {mapData.description && (
           <p className="text-[11px] mt-0.5 truncate pr-8" style={{ color: theme === 'light' ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)' }}>{cleanDescription(mapData.description)}</p>
         )}

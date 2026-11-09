@@ -1,4 +1,7 @@
 "use client";
+import { EcuCompatibilityModal } from "@/components/ecu-compatibility-modal";
+import { MultimapModal } from "@/components/multimap-modal";
+import { applyGN4308Multimap, buildMultimapVersionChanges, getMultimapSourceBanks, type MultimapSourceBank, type MultimapVehicleConfiguration, type MultimapSelector } from "@/lib/ecu/gn4308-multimap";
 
 import { useEffect, useState, useRef, useCallback, useMemo, useDeferredValue } from "react";
 import { useRouter } from "next/navigation";
@@ -73,6 +76,12 @@ import { StyledSelect } from "@/components/styled-select";
 import { formatEcuWithManufacturer } from "@/lib/ecu-manufacturer";
 import { isBigEndianEcu, setProjectByteOrder, setProjectEcuType, projectIsBigEndian } from "@/lib/ecu-endianness";
 import { resolveMapCellLayout, resolveAxisSources } from "@/lib/map-cell-layout";
+import { updateAxisEdits } from "@/lib/map-axis-edits";
+import { updateMapCellEdits, rebaseMapCellEdits, type BankCopyOptions } from "@/lib/map-bank-edits";
+import { findBankCounterparts } from "@/lib/map-bank-matching";
+import { MapSensorModal } from "@/components/map-sensor-modal";
+import { detectMapSensorCalibration, type SensorPlan } from "@/lib/map-sensor-calibration";
+import { stageSensorCalibration } from "@/lib/calibration-stage";
 import {
   applyDisplayOverrides,
   displaySettingsDiffer,
@@ -2120,13 +2129,22 @@ function EditorPageContent() {
   // persisted labels back into MapViewer via `initialXAxisLabels` /
   // `initialYAxisLabels`.
   const [mapAxisLabels, setMapAxisLabels] = useState<Map<number, { x?: string[]; y?: string[] }>>(new Map());
+  // Copying between independent banks is opt-in for each open map window.
+  const [bankCopyOptions, setBankCopyOptions] = useState<Map<number, BankCopyOptions>>(new Map());
+  useEffect(() => {
+    setBankCopyOptions(new Map());
+  }, [projectData?.fileId, currentVersionId]);
+
   // Axes partagés : sur EDC15, les dix SOI d'un codeblock lisent le même axe
   // de régime et le même axe d'IQ dans le fichier (les durations EDC16
   // aussi). Une édition d'axe faite sur l'une vaut pour toutes : les autres
   // fenêtres l'affichaient encore à l'ancienne alors que l'export écrivait
   // bien le fichier. L'entrée est donc posée, ou retirée, sur chaque map qui
   // lit la même adresse, convertie par le brut quand ses facteurs diffèrent.
-  const sharedAxisRef = useRef<{ maps: MapData[]; settings: Map<number, MapDisplaySettings> }>({ maps: [], settings: new Map() });
+  const sharedAxisRef = useRef<{
+    maps: MapData[]; settings: Map<number, MapDisplaySettings>;
+    data: number[]; copyOtherBanks: Map<number, BankCopyOptions>; bigEndian: boolean;
+  }>({ maps: [], settings: new Map(), data: [], copyOtherBanks: new Map(), bigEndian: false });
   const effectiveAxisSources = (map: MapData, settings: Map<number, MapDisplaySettings>) => {
     const sources = resolveAxisSources(map);
     const ds = settings.get(map.address);
@@ -2150,69 +2168,14 @@ function EditorPageContent() {
       },
     };
   };
-  const convertAxisLabels = (
-    labels: string[],
-    from: { correction: number; offset: number },
-    to: { correction: number; offset: number },
-  ): string[] => {
-    if (from.correction === to.correction && from.offset === to.offset) return [...labels];
-    return labels.map((label) => {
-      const value = Number(String(label).trim().replace(',', '.'));
-      if (!Number.isFinite(value)) return label;
-      const raw = Math.round((value - from.offset) / (from.correction || 1));
-      return String(Number((raw * to.correction + to.offset).toFixed(4)));
-    });
-  };
   const handleAxisLabelsChange = useCallback((mapAddress: number, axes: { x?: string[]; y?: string[] }) => {
     setMapAxisLabels(prev => {
-      const { maps, settings } = sharedAxisRef.current;
-      const source = maps.find((m) => m.address === mapAddress);
-      const sourceAxes = source && !source.external_source ? effectiveAxisSources(source, settings) : null;
-      const siblings: { map: MapData; axis: 'x' | 'y'; sourceAxis: 'x' | 'y' }[] = [];
-      if (sourceAxes) {
-        for (const m of maps) {
-          if (m.address === mapAddress || m.external_source) continue;
-          const sa = effectiveAxisSources(m, settings);
-          for (const sourceAxis of ['x', 'y'] as const) {
-            const addr = sourceAxes[sourceAxis].address;
-            if (axes[sourceAxis] === undefined || !addr) continue;
-            if (sa.x.address === addr) siblings.push({ map: m, axis: 'x', sourceAxis });
-            if (sa.y.address === addr) siblings.push({ map: m, axis: 'y', sourceAxis });
-          }
-        }
-      }
-
-      const next = new Map(prev);
-      let changed = false;
-      // Tableau vide = axe revenu à l'origine → l'entrée de cet axe est retirée
-      const apply = (address: number, patch: { x?: string[]; y?: string[] }) => {
-        const existing = next.get(address) || {};
-        const merged = {
-          x: patch.x !== undefined ? (patch.x.length > 0 ? patch.x : undefined) : existing.x,
-          y: patch.y !== undefined ? (patch.y.length > 0 ? patch.y : undefined) : existing.y,
-        };
-        const prevEntry = next.get(address);
-        if (!merged.x && !merged.y) {
-          if (prevEntry) {
-            next.delete(address);
-            changed = true;
-          }
-          return;
-        }
-        if (JSON.stringify(prevEntry?.x) === JSON.stringify(merged.x) && JSON.stringify(prevEntry?.y) === JSON.stringify(merged.y)) return;
-        next.set(address, merged);
-        changed = true;
-      };
-      apply(mapAddress, axes);
-      for (const sibling of siblings) {
-        const labels = axes[sibling.sourceAxis] ?? [];
-        const converted = labels.length > 0 && sourceAxes
-          ? convertAxisLabels(labels, sourceAxes[sibling.sourceAxis], effectiveAxisSources(sibling.map, settings)[sibling.axis])
-          : [];
-        apply(sibling.map.address, sibling.axis === 'x' ? { x: converted } : { y: converted });
-      }
-      if (!changed) return prev;
-      // Un axe édité, ou remis d'origine, est une modification à enregistrer
+      const { maps, settings, data, copyOtherBanks, bigEndian } = sharedAxisRef.current;
+      const next = updateAxisEdits({
+        maps, sourceAddress: mapAddress, axes, previous: prev, data,
+        sourcesOf: map => effectiveAxisSources(map, settings), copyOtherBanks: isLoadingVersionRef.current ? false : copyOtherBanks.get(mapAddress) ?? false, bigEndian,
+      });
+      if (next === prev) return prev;
       if (!isLoadingVersionRef.current) {
         setTimeout(() => setHasUnsavedChanges(true), 0);
       }
@@ -2297,8 +2260,21 @@ function EditorPageContent() {
   // Incrémenté quand une fenêtre remonte son orientation : les octets édités
   // (hexdump, checksum) doivent être recalculés, la ref seule ne re-rend pas
   const [flipRevision, setFlipRevision] = useState(0);
+  // A copied-to map may not have reported its display orientation yet.
+  const pendingBankCopyFlipsRef = useRef(new Set<number>());
   const handleAxesFlipChange = useCallback((mapAddress: number, flip: { rowsReversed: boolean; colsReversed: boolean }) => {
     const existing = mapAxesFlipRef.current.get(mapAddress);
+    if (pendingBankCopyFlipsRef.current.delete(mapAddress) && existing &&
+        (existing.rowsReversed !== flip.rowsReversed || existing.colsReversed !== flip.colsReversed)) {
+      const map = sharedAxisRef.current.maps.find(m => m.address === mapAddress);
+      if (map) setAllMapModifications(prev => {
+        const edits = prev.get(mapAddress);
+        if (!edits) return prev;
+        const next = new Map(prev);
+        next.set(mapAddress, rebaseMapCellEdits(map, edits, existing, flip));
+        return next;
+      });
+    }
     if (existing && existing.rowsReversed === flip.rowsReversed && existing.colsReversed === flip.colsReversed) return;
     mapAxesFlipRef.current.set(mapAddress, flip);
     setFlipRevision((r) => r + 1);
@@ -2421,7 +2397,11 @@ function EditorPageContent() {
   // Store pour les settings d'affichage de chaque map (clé: mapAddress)
   const [mapDisplaySettingsStore, setMapDisplaySettingsStore] = useState<Map<number, MapDisplaySettings>>(new Map());
   // Incrémenté à chaque restauration des réglages d'un projet : la mémoire
-  sharedAxisRef.current = { maps: projectData?.detectionResults?.maps ?? [], settings: mapDisplaySettingsStore };
+  sharedAxisRef.current = {
+    maps: projectData?.detectionResults?.maps ?? [], settings: mapDisplaySettingsStore,
+    data: projectData?.file_data ?? [],
+    copyOtherBanks: bankCopyOptions, bigEndian: isBigEndianEcu(projectData?.ecu_type),
+  };
   // par calculateur doit se réappliquer APRÈS, sinon la restauration
   // asynchrone (réponse du fichier projet) écrase ce qu'elle avait posé.
   const [displayRestoreTick, setDisplayRestoreTick] = useState(0);
@@ -3485,7 +3465,7 @@ function EditorPageContent() {
   // applyEditsToFileData. L'ancien loadVersionData du CompareModal écrivait
   // les valeurs AFFICHÉES telles quelles (sans correction_factor/offset ni
   // dé-flip) → différences fausses ou nulles.
-  const buildVersionFileData = useCallback(async (versionId: string): Promise<number[]> => {
+  const buildVersionFileData = useCallback(async (versionId: string, strict = false): Promise<number[]> => {
     const original = originalFileDataRef.current ?? projectData?.file_data ?? [];
     const version = versions.find(v => v.id === versionId);
     if (!version || version.name === "Ori") return [...original];
@@ -3498,7 +3478,8 @@ function EditorPageContent() {
           base = Array.from(disk);
           versionFileDataRef.current.set(versionId, base);
         }
-      } catch {
+      } catch (error) {
+        if (strict) throw error;
         // pas de binaire importé pour cette version
       }
     }
@@ -3545,6 +3526,7 @@ function EditorPageContent() {
       });
       applyEditsToFileData(data, mods, axisEdits, flips);
     } catch (error) {
+      if (strict) throw error;
       console.error("buildVersionFileData error", error);
     }
     return Array.from(data);
@@ -4722,21 +4704,33 @@ function EditorPageContent() {
   // Callback stable pour gérer les modifications de map
   const handleMapModifications = useCallback((mapAddress: number, changedCells: Record<string, number>) => {
     setAllMapModifications(prev => {
-      const next = new Map(prev);
-      const currentCells = prev.get(mapAddress);
-      const newCellsStr = JSON.stringify(changedCells);
-      const currentCellsStr = JSON.stringify(currentCells || {});
-
-      // Only update if actually different
-      if (newCellsStr === currentCellsStr) {
-        return prev; // No change, return same reference
+      const { maps, settings, data, copyOtherBanks, bigEndian } = sharedAxisRef.current;
+      if (!isLoadingVersionRef.current && copyOtherBanks.get(mapAddress)?.values &&
+          JSON.stringify(prev.get(mapAddress) ?? {}) !== JSON.stringify(changedCells)) {
+        const source = maps.find(m => m.address === mapAddress);
+        if (source) for (const target of findBankCounterparts(maps, source)) {
+          if (!mapAxesFlipRef.current.has(target.address)) {
+            mapAxesFlipRef.current.set(target.address, {
+              ...(mapAxesFlipRef.current.get(mapAddress) ?? { rowsReversed: false, colsReversed: false }),
+            });
+            pendingBankCopyFlipsRef.current.add(target.address);
+          }
+        }
       }
-
-      if (Object.keys(changedCells).length === 0) {
-        next.delete(mapAddress);
-      } else {
-        next.set(mapAddress, changedCells);
-      }
+      const next = updateMapCellEdits({
+        maps, sourceAddress: mapAddress, changedCells, previous: prev, data,
+        enabled: !isLoadingVersionRef.current && (copyOtherBanks.get(mapAddress)?.values ?? false),
+        bigEndian, flips: mapAxesFlipRef.current,
+        correctionOf: map => {
+          const ds = settings.get(map.address);
+          const divisor = ds?.divisor && Number.isFinite(ds.divisor) ? ds.divisor : 1;
+          return {
+            correction: ds && Number.isFinite(ds.factor) ? ds.factor / divisor : map.correction_factor ?? 1,
+            offset: ds && Number.isFinite(ds.offset) ? ds.offset : map.offset ?? 0,
+          };
+        },
+      });
+      if (next === prev) return prev;
 
       // Mark as dirty only if NOT loading a version (real user edit)
       // We check inside the setter to ensure we only mark dirty for actual changes
@@ -4760,9 +4754,7 @@ function EditorPageContent() {
     // hausse tombait sur la ligne miroir et la courbe ne bougeait pas
     // (issue #45).
     const bytes = Uint8Array.from(buildEditedFileData());
-    binaryModifications.forEach(({ newValue }, addr) => {
-      if (addr >= 0 && addr < bytes.length) bytes[addr] = newValue & 0xff;
-    });
+    // Binary changes are already in the base; preserve any newer map/axis edits above them.
     return { bytes, edits: [] as { map_address: number; payload?: Record<string, unknown> }[] };
   }, [buildEditedFileData, binaryModifications]);
 
@@ -6319,6 +6311,98 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
 
   // Menu du bouton Outils (sidebar dépliée ou repliée) : fermé au clic
   // ailleurs ou à l'action choisie
+  const [isEcuCompatibilityOpen, setIsEcuCompatibilityOpen] = useState(false);
+  const [isMultimapOpen, setIsMultimapOpen] = useState(false);
+  const [multimapBusy, setMultimapBusy] = useState(false);
+  const [includeMultimapUnsavedEdits, setIncludeMultimapUnsavedEdits] = useState(true);
+  const [multimapWorkingData, setMultimapWorkingData] = useState<Uint8Array | null>(null);
+  const [multimapSavedData, setMultimapSavedData] = useState<Uint8Array | null>(null);
+  const multimapVersionBaseRef = useRef<Uint8Array | null>(null);
+  const openMultimap = async () => {
+    setToolsMenuOpen(false);
+    if (!currentVersionId || isOnOriVersion()) {
+      toast({ title: t.errors.oriVersionReadOnly, description: "Create and select a new version before applying multimap.", variant: "destructive" });
+      return;
+    }
+    setIncludeMultimapUnsavedEdits(true);
+    setMultimapWorkingData(null); setMultimapSavedData(null);
+    multimapVersionBaseRef.current = null;
+    setMultimapBusy(true); setIsMultimapOpen(true);
+    try {
+      if (isLoadingVersionRef.current) throw new Error("Wait for the selected version to finish loading, then open the tool again.");
+      const working = new Uint8Array(buildEditedFileData());
+      const saved = new Uint8Array(await buildVersionFileData(currentVersionId, true));
+      const rawBase = versionFileDataRef.current.get(currentVersionId) ?? originalFileDataRef.current;
+      if (!rawBase || rawBase.length !== saved.length) throw new Error("The saved version base could not be loaded.");
+      multimapVersionBaseRef.current = new Uint8Array(rawBase);
+      setMultimapSavedData(saved);
+      setMultimapWorkingData(working);
+    } catch (error) {
+      setIsMultimapOpen(false);
+      toast({ title: "Multimap not opened", description: error instanceof Error ? error.message : "The saved version could not be read.", variant: "destructive" });
+    } finally { setMultimapBusy(false); }
+  };
+  const applyMultimap = async (selector: MultimapSelector, initializeAllBanks: boolean, configuration: MultimapVehicleConfiguration, source: MultimapSourceBank) => {
+    if (!projectData || multimapBusy) return;
+    if (isOnOriVersion()) {
+      toast({ title: t.errors.oriVersionReadOnly, description: "Create and select a new version before applying multimap.", variant: "destructive" });
+      return;
+    }
+    setMultimapBusy(true);
+    try {
+      const selectedInput = includeMultimapUnsavedEdits ? multimapWorkingData : multimapSavedData;
+      const versionBase = multimapVersionBaseRef.current;
+      if (!selectedInput || !versionBase) throw new Error("Open the tool again to load the version data.");
+      const before = new Uint8Array(selectedInput);
+      const output = await applyGN4308Multimap(before, selector, initializeAllBanks, configuration, source);
+      const detectionResults = await detectMaps({ fileDataBase64: bytesToBase64(output), fileName: projectData.original_name || projectData.file_name || "multimap.bin", ecuType: projectData.ecu_type || undefined });
+      // Replace old working edits with a complete generated byte delta. Leaving
+      // stale cell/axis edits would write the old target tune over the clone.
+      setBinaryModifications(buildMultimapVersionChanges(versionBase, output));
+      setAllMapModifications(new Map());
+      setMapAxisLabels(new Map());
+      clearMapDataCache();
+      setOpenMaps([]);
+      setProjectData({ ...projectData, file_data: Array.from(output), detectionResults: stripSoiTag(detectionResults) });
+      setHasUnsavedChanges(true);
+      setIsMultimapOpen(false);
+      toast({ title: "Beta multimap applied", description: "Experimental conversion. All multimap support is in testing; use at your own risk. Save this version, then export the file." });
+    } catch (error) {
+      toast({ title: "Multimap not applied", description: error instanceof Error ? error.message : "Conversion failed.", variant: "destructive" });
+    } finally { setMultimapBusy(false); }
+  };
+  const [mapSensorSnapshot, setMapSensorSnapshot] = useState<number[] | null>(null);
+  useEffect(() => { setMapSensorSnapshot(null); }, [projectData?.fileId, currentVersionId]);
+  const applySensorCalibration = (plan: SensorPlan) => {
+    if (!projectData) throw new Error('No binary is open.');
+    if (isOnOriVersion()) throw new Error('Select or create an editable version first.');
+    if (isLoadingVersionRef.current) throw new Error('Wait for the version to finish loading.');
+    const live = buildEditedFileData();
+    const fresh = detectMapSensorCalibration(live, projectData.ecu_type ?? '');
+    const allowed = new Map<number, number>();
+    for (const match of fresh) {
+      if (match.curve) { allowed.set(match.curve.axisAddress, 4); allowed.set(match.curve.address, 4); }
+      if (match.diagnostics) {
+        match.diagnostics.addresses.forEach(address => allowed.set(address, 2));
+        allowed.set(match.diagnostics.scalarAddress, 2);
+      }
+    }
+    if (plan.patches.some(patch => allowed.get(patch.address) !== patch.after.length)) throw new Error('Calibration patterns changed since preview. Close and reopen the tool.');
+    const result = stageSensorCalibration({
+      base: projectData.file_data, live, original: originalFileDataRef.current ?? projectData.file_data,
+      plan, maps: projectData.detectionResults.maps, cells: allMapModifications, axes: mapAxisLabels,
+      binary: binaryModifications, flips: mapAxesFlipRef.current,
+      sourcesOf: map => effectiveAxisSources(map, mapDisplaySettingsStore), bigEndian: isBigEndianEcu(projectData.ecu_type),
+    });
+    if (!result) return;
+    clearMapDataCache();
+    setAllMapModifications(result.cells);
+    setMapAxisLabels(result.axes);
+    setBinaryModifications(result.binary);
+    setProjectData(prev => prev ? { ...prev, file_data: result.data } : prev);
+    setHasUnsavedChanges(true);
+    toast({ title: 'MAP sensor calibration staged', description: 'Review the calibration, save this version, then export through the normal checksum workflow.' });
+  };
   const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
   const toolsMenuRef = useRef<HTMLDivElement | null>(null);
   const toolsMenuCollapsedRef = useRef<HTMLDivElement | null>(null);
@@ -6358,6 +6442,17 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
         <Timer className="w-4 h-4" />
         <span>{t.eoiModal.title}</span>
       </button>
+      <button type="button" disabled={!/EDC15/i.test(projectData?.ecu_type ?? '')}
+        onClick={() => { setToolsMenuOpen(false); setMapSensorSnapshot(buildEditedFileData()); }}
+        className={`w-full px-3 py-1.5 text-left text-sm rounded-md transition-colors disabled:opacity-40 ${getButtonHoverClass()}`}>
+        MAP Sensor Calibration
+      </button>
+      <button type="button" onClick={() => { void openMultimap(); }} className={`w-full px-3 py-1.5 text-left text-sm rounded-md transition-colors ${getButtonHoverClass()}`}>
+        Multi-Map Beta
+      </button>
+      <button type="button" onClick={() => { setToolsMenuOpen(false); setIsEcuCompatibilityOpen(true); }} className={`w-full px-3 py-1.5 text-left text-sm rounded-md transition-colors ${getButtonHoverClass()}`}>
+        ECU Compatibility
+      </button>
     </div>
   );
 
@@ -6388,6 +6483,12 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
   };
 
   const handleCloseMapWindow = (mapAddress: number) => {
+    setBankCopyOptions(prev => {
+      if (!prev.has(mapAddress)) return prev;
+      const next = new Map(prev);
+      next.delete(mapAddress);
+      return next;
+    });
     userResizedMapsRef.current.delete(mapAddress);
     setOpenMaps((prev) => prev.filter((m) => m.address !== mapAddress));
     setMapViewModes((prev) => {
@@ -8303,6 +8404,15 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
                             initialXAxisLabels={persistedAxes?.x}
                             initialYAxisLabels={persistedAxes?.y}
                             onAxisLabelsChange={(axes) => handleAxisLabelsChange(map.address, axes)}
+                            bankCopyOptions={bankCopyOptions.get(map.address) ?? { x: false, y: false, values: false }}
+                            otherBankCount={findBankCounterparts(projectData.detectionResults.maps, map).length}
+                            onBankCopyOptionsChange={(options) => {
+                              setBankCopyOptions(prev => {
+                                const next = new Map(prev);
+                                next.set(map.address, options);
+                                return next;
+                              });
+                            }}
                             onAxesFlipChange={handleAxesFlipChange}
                             theme={theme}
                             onSelectionChange={(info) => handleMapSelectionChange(map.address, info)}
@@ -9055,6 +9165,8 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
       />
 
       {/* Checksum Modal */}
+      {isEcuCompatibilityOpen && <EcuCompatibilityModal theme={theme} onClose={() => setIsEcuCompatibilityOpen(false)} />}
+      {isMultimapOpen && <MultimapModal theme={theme} busy={multimapBusy} sourceBanks={getMultimapSourceBanks((includeMultimapUnsavedEdits ? multimapWorkingData : multimapSavedData) ?? new Uint8Array())} includeUnsavedEdits={includeMultimapUnsavedEdits} onIncludeUnsavedChange={setIncludeMultimapUnsavedEdits} onClose={() => { if (!multimapBusy) setIsMultimapOpen(false); }} onApply={applyMultimap} />}
       {isChecksumModalOpen && (
         <ChecksumModal
           onClose={closeChecksumModal}
@@ -9226,6 +9338,11 @@ await axios.put("/api/versioning/map-edits", { versionId: currentVersionId, edit
           </span>
         </div>
       )}
+
+      {mapSensorSnapshot && projectData && <MapSensorModal
+        data={mapSensorSnapshot} ecuType={projectData.ecu_type ?? ''} theme={theme}
+        readOnlyReason={isOnOriVersion() ? 'Select or create an editable version before applying calibration.' : undefined}
+        onClose={() => setMapSensorSnapshot(null)} onApply={applySensorCalibration} />}
 
       {/* Version Limit Notification */}
       {versionLimitNotification.visible && (

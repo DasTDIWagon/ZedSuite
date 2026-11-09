@@ -1,0 +1,3145 @@
+{
+  "cases": 180,
+  "files": [
+    {
+      "ecu": "038906012FD",
+      "software": "4102",
+      "sha256": "a7990b5dc1a9161ab2d3b5a021a48f0fcfcd49046eebf302e667f3cbb7a6a17d",
+      "banks": 3,
+      "original_checksum": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 30,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 42,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 346614,
+            "axisAddress": 346610,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              341570,
+              341574,
+              341614
+            ],
+            "scalarAddress": 342524,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "5c000",
+            "label": "Bank 0x05C000",
+            "start": 376832,
+            "end": 442368
+          },
+          "curve": {
+            "address": 412150,
+            "axisAddress": 412146,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              407106,
+              407110,
+              407150
+            ],
+            "scalarAddress": 408060,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 477686,
+            "axisAddress": 477682,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              472642,
+              472646,
+              472686
+            ],
+            "scalarAddress": 473596,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012GN",
+      "software": "4308",
+      "sha256": "d7b4f0a6a2163a7b3330e1a42a59ad3e296b9c4152b25dee72f0ccbe80df9d6e",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 8,
+        "fixed": 0,
+        "matched": 8,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 346614,
+            "axisAddress": 346610,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              341570,
+              341574,
+              341614
+            ],
+            "scalarAddress": 342524,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 477686,
+            "axisAddress": 477682,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              472642,
+              472646,
+              472686
+            ],
+            "scalarAddress": 473596,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012GQ",
+      "software": "4307",
+      "sha256": "8f0969ce89dce9ba4b883ff5a12840928915e3a71b156a452b7458d5422f93a1",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 8,
+        "fixed": 0,
+        "matched": 8,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 346614,
+            "axisAddress": 346610,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              341570,
+              341574,
+              341614
+            ],
+            "scalarAddress": 342524,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 477686,
+            "axisAddress": 477682,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              472642,
+              472646,
+              472686
+            ],
+            "scalarAddress": 473596,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012F",
+      "software": "3313",
+      "sha256": "5ba4b45861d1f1d2be33af2cc35dd5428b3656499d6c8545d3b316bdfc80d77b",
+      "banks": 3,
+      "original_checksum": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 30,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 42,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 345618,
+            "axisAddress": 345614,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              340684,
+              340688,
+              340728
+            ],
+            "scalarAddress": 341620,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "5c000",
+            "label": "Bank 0x05C000",
+            "start": 376832,
+            "end": 442368
+          },
+          "curve": {
+            "address": 411154,
+            "axisAddress": 411150,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              406220,
+              406224,
+              406264
+            ],
+            "scalarAddress": 407156,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 476690,
+            "axisAddress": 476686,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              471756,
+              471760,
+              471800
+            ],
+            "scalarAddress": 472692,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012F",
+      "software": "3331",
+      "sha256": "121a36d15ff7337637b30977d281faeac985ac5191dfde5e42244388662ecc04",
+      "banks": 3,
+      "original_checksum": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 30,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 42,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 345618,
+            "axisAddress": 345614,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              340684,
+              340688,
+              340728
+            ],
+            "scalarAddress": 341620,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "5c000",
+            "label": "Bank 0x05C000",
+            "start": 376832,
+            "end": 442368
+          },
+          "curve": {
+            "address": 411154,
+            "axisAddress": 411150,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              406220,
+              406224,
+              406264
+            ],
+            "scalarAddress": 407156,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 476690,
+            "axisAddress": 476686,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              471756,
+              471760,
+              471800
+            ],
+            "scalarAddress": 472692,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012FH",
+      "software": "3537",
+      "sha256": "3fd6248094cadf348c895d99933d238c23d997162f6594f67afbd9b69261ea52",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 8,
+        "fixed": 0,
+        "matched": 8,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 345618,
+            "axisAddress": 345614,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              340684,
+              340688,
+              340728
+            ],
+            "scalarAddress": 341620,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 476690,
+            "axisAddress": 476686,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              471756,
+              471760,
+              471800
+            ],
+            "scalarAddress": 472692,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012FN",
+      "software": "3358",
+      "sha256": "2a6950f28488bfd80044052e14bdeede016330fc2ed385772e35dd0747301394",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 8,
+        "fixed": 0,
+        "matched": 8,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 345618,
+            "axisAddress": 345614,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              340684,
+              340688,
+              340728
+            ],
+            "scalarAddress": 341620,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 476690,
+            "axisAddress": 476686,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              471756,
+              471760,
+              471800
+            ],
+            "scalarAddress": 472692,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012H",
+      "software": "3315",
+      "sha256": "47a054583a69be3865a077f12a52976b7213ceb5ca841b2a5bb7b83808c7ce37",
+      "banks": 3,
+      "original_checksum": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 30,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 42,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 345618,
+            "axisAddress": 345614,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              340684,
+              340688,
+              340728
+            ],
+            "scalarAddress": 341620,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "5c000",
+            "label": "Bank 0x05C000",
+            "start": 376832,
+            "end": 442368
+          },
+          "curve": {
+            "address": 411154,
+            "axisAddress": 411150,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              406220,
+              406224,
+              406264
+            ],
+            "scalarAddress": 407156,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 476690,
+            "axisAddress": 476686,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              471756,
+              471760,
+              471800
+            ],
+            "scalarAddress": 472692,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012H",
+      "software": "3332",
+      "sha256": "7d9acb21f593ca11724919e7378ff4c2c00ce32b1b1d488f872ca9f6bae643e7",
+      "banks": 3,
+      "original_checksum": {
+        "result": "OK",
+        "found": 11,
+        "fixed": 0,
+        "matched": 11,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 30,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 42,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 11,
+            "fixed": 0,
+            "matched": 11,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 345618,
+            "axisAddress": 345614,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              340684,
+              340688,
+              340728
+            ],
+            "scalarAddress": 341620,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "5c000",
+            "label": "Bank 0x05C000",
+            "start": 376832,
+            "end": 442368
+          },
+          "curve": {
+            "address": 411154,
+            "axisAddress": 411150,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              406220,
+              406224,
+              406264
+            ],
+            "scalarAddress": 407156,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 476690,
+            "axisAddress": 476686,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              471756,
+              471760,
+              471800
+            ],
+            "scalarAddress": 472692,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012AF",
+      "software": "2825",
+      "sha256": "a608282f32486e1f45605c7e3889d80ab45337104914e2220a5794f3e8549529",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 396204,
+            "axisAddress": 396200,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387510,
+              387514,
+              387554
+            ],
+            "scalarAddress": 388476,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494508,
+            "axisAddress": 494504,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485814,
+              485818,
+              485858
+            ],
+            "scalarAddress": 486780,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012AJ",
+      "software": "2829",
+      "sha256": "4a2fd6df0f9f0187bf9edb94ff283a90428cd9f20b44f29748519e41fd84d3cf",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 396204,
+            "axisAddress": 396200,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387510,
+              387514,
+              387554
+            ],
+            "scalarAddress": 388476,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494508,
+            "axisAddress": 494504,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485814,
+              485818,
+              485858
+            ],
+            "scalarAddress": 486780,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012B",
+      "software": "2802",
+      "sha256": "82452f5d9e2b1c1ff69db1d4d3ccdfee90300e85aae56261b808c598ff1dcf91",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 396204,
+            "axisAddress": 396200,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387510,
+              387514,
+              387554
+            ],
+            "scalarAddress": 388476,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494508,
+            "axisAddress": 494504,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485814,
+              485818,
+              485858
+            ],
+            "scalarAddress": 486780,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012C",
+      "software": "2803",
+      "sha256": "1a943cfa95665b406682b58d615f74f8240f1e44726f46b1635c70a932711560",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 396204,
+            "axisAddress": 396200,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387510,
+              387514,
+              387554
+            ],
+            "scalarAddress": 388476,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494508,
+            "axisAddress": 494504,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485814,
+              485818,
+              485858
+            ],
+            "scalarAddress": 486780,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012CP",
+      "software": "2839",
+      "sha256": "bc90eeb7f7c92b67f13f5464c824618c8ca2c76756540cc6fd69f2b231f83b61",
+      "banks": 3,
+      "original_checksum": {
+        "result": "OK",
+        "found": 7,
+        "fixed": 0,
+        "matched": 7,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 7,
+            "fixed": 0,
+            "matched": 7,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 30,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 7,
+            "fixed": 0,
+            "matched": 7,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 42,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 7,
+            "fixed": 0,
+            "matched": 7,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 396204,
+            "axisAddress": 396200,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387510,
+              387514,
+              387554
+            ],
+            "scalarAddress": 388476,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "64000",
+            "label": "Bank 0x064000",
+            "start": 409600,
+            "end": 458752
+          },
+          "curve": {
+            "address": 445356,
+            "axisAddress": 445352,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              436662,
+              436666,
+              436706
+            ],
+            "scalarAddress": 437628,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494508,
+            "axisAddress": 494504,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485814,
+              485818,
+              485858
+            ],
+            "scalarAddress": 486780,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012Q",
+      "software": "2818",
+      "sha256": "09d0ddaf0f132639d3a9f590152981c57826c4c2f6295840d6a99925a891c6a5",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 396204,
+            "axisAddress": 396200,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387510,
+              387514,
+              387554
+            ],
+            "scalarAddress": 388476,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494508,
+            "axisAddress": 494504,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485814,
+              485818,
+              485858
+            ],
+            "scalarAddress": 486780,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012BD",
+      "software": "2507",
+      "sha256": "07d2a40baed3c2f810861f68a45ee2626d1a5b7093be88afc83a1adeeb17ca26",
+      "banks": 3,
+      "original_checksum": {
+        "result": "OK",
+        "found": 7,
+        "fixed": 0,
+        "matched": 7,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 7,
+            "fixed": 0,
+            "matched": 7,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 30,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 7,
+            "fixed": 0,
+            "matched": 7,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 42,
+          "checksum_bytes": 12,
+          "verified": {
+            "result": "OK",
+            "found": 7,
+            "fixed": 0,
+            "matched": 7,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 395898,
+            "axisAddress": 395894,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387420,
+              387424,
+              387464
+            ],
+            "scalarAddress": 388302,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "64000",
+            "label": "Bank 0x064000",
+            "start": 409600,
+            "end": 458752
+          },
+          "curve": {
+            "address": 445050,
+            "axisAddress": 445046,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              436572,
+              436576,
+              436616
+            ],
+            "scalarAddress": 437454,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494202,
+            "axisAddress": 494198,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485724,
+              485728,
+              485768
+            ],
+            "scalarAddress": 486606,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012M",
+      "software": "2528",
+      "sha256": "494d1f983e3c2c2386099fecd96f9940049bf22bfb759f8efc2191690ceec1ce",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 395898,
+            "axisAddress": 395894,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387420,
+              387424,
+              387464
+            ],
+            "scalarAddress": 388302,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494202,
+            "axisAddress": 494198,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485724,
+              485728,
+              485768
+            ],
+            "scalarAddress": 486606,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012GK",
+      "software": "KD34",
+      "sha256": "499d0831dd0743d1bce4767488ba3e58910f507d0b843ad32178562580b02f85",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 8,
+        "fixed": 0,
+        "matched": 8,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 346608,
+            "axisAddress": 346604,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              341570,
+              341574,
+              341614
+            ],
+            "scalarAddress": 342524,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 477680,
+            "axisAddress": 477676,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              472642,
+              472646,
+              472686
+            ],
+            "scalarAddress": 473596,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906019AB",
+      "software": "1071",
+      "sha256": "244a97ac2853149f8560d870f9fc9dc31b17be65807ce27e0fa5d37ae39fa593",
+      "banks": 1,
+      "original_checksum": {
+        "result": "OK",
+        "found": 3,
+        "fixed": 0,
+        "matched": 3,
+        "variant": "tdi41"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 3,
+            "fixed": 0,
+            "matched": 3,
+            "variant": "tdi41"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 10,
+          "checksum_bytes": 4,
+          "verified": {
+            "result": "OK",
+            "found": 3,
+            "fixed": 0,
+            "matched": 3,
+            "variant": "tdi41"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 14,
+          "checksum_bytes": 4,
+          "verified": {
+            "result": "OK",
+            "found": 3,
+            "fixed": 0,
+            "matched": 3,
+            "variant": "tdi41"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 492814,
+            "axisAddress": 492810,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              486442,
+              486446,
+              486486
+            ],
+            "scalarAddress": 487408,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906019LP",
+      "software": "1596",
+      "sha256": "9feabb3471955db0018af9ab6dbbb23dcd28f9580f5be2b4e1c83fde7d05a47b",
+      "banks": 1,
+      "original_checksum": {
+        "result": "OK",
+        "found": 5,
+        "fixed": 0,
+        "matched": 5,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 5,
+            "fixed": 0,
+            "matched": 5,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 10,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 5,
+            "fixed": 0,
+            "matched": 5,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 14,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 5,
+            "fixed": 0,
+            "matched": 5,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 455804,
+            "axisAddress": 455800,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              471476,
+              471480,
+              471520
+            ],
+            "scalarAddress": 472430,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012AJ",
+      "software": "2707",
+      "sha256": "adede67734b52fbbffabad8565d2474ecc075cfc5279639fdf1114768f26417d",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 395898,
+            "axisAddress": 395894,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387420,
+              387424,
+              387464
+            ],
+            "scalarAddress": 388302,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494202,
+            "axisAddress": 494198,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485724,
+              485728,
+              485768
+            ],
+            "scalarAddress": 486606,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012S",
+      "software": "2512",
+      "sha256": "0fdf52cabe3df96d3bf0298b72fa4bed343398324767dd462c0f54c14ed65c6e",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 395898,
+            "axisAddress": 395894,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387420,
+              387424,
+              387464
+            ],
+            "scalarAddress": 388302,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494202,
+            "axisAddress": 494198,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485724,
+              485728,
+              485768
+            ],
+            "scalarAddress": 486606,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012BS",
+      "software": "2804",
+      "sha256": "78cc9639041f189d529859876b4f8cc863d98689c23391c07a902fd1e4f1af09",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 396204,
+            "axisAddress": 396200,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387510,
+              387514,
+              387554
+            ],
+            "scalarAddress": 388476,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494508,
+            "axisAddress": 494504,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485814,
+              485818,
+              485858
+            ],
+            "scalarAddress": 486780,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012CA",
+      "software": "2806",
+      "sha256": "475aa35b3b08f1311c1d10ac60b156b01508ecdd4ab71bc8653e7640f03c268f",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 6,
+        "fixed": 0,
+        "matched": 6,
+        "variant": "tdi41v2"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 6,
+            "fixed": 0,
+            "matched": 6,
+            "variant": "tdi41v2"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "58000",
+            "label": "Bank 0x058000",
+            "start": 360448,
+            "end": 409600
+          },
+          "curve": {
+            "address": 396204,
+            "axisAddress": 396200,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              387510,
+              387514,
+              387554
+            ],
+            "scalarAddress": 388476,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "70000",
+            "label": "Bank 0x070000",
+            "start": 458752,
+            "end": 507904
+          },
+          "curve": {
+            "address": 494508,
+            "axisAddress": 494504,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              485814,
+              485818,
+              485858
+            ],
+            "scalarAddress": 486780,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    },
+    {
+      "ecu": "038906012HA",
+      "software": "4922",
+      "sha256": "ce551cb29d32d31696fa9ef7e0417a65b9973d9649d17bd83dfffd52d3c433ce",
+      "banks": 2,
+      "original_checksum": {
+        "result": "OK",
+        "found": 8,
+        "fixed": 0,
+        "matched": 8,
+        "variant": "tdi41_2002"
+      },
+      "presets": [
+        {
+          "preset": "0281002177",
+          "calibration_bytes": 0,
+          "checksum_bytes": 0,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281002401",
+          "calibration_bytes": 20,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        },
+        {
+          "preset": "0281006059",
+          "calibration_bytes": 28,
+          "checksum_bytes": 8,
+          "verified": {
+            "result": "OK",
+            "found": 8,
+            "fixed": 0,
+            "matched": 8,
+            "variant": "tdi41_2002"
+          }
+        }
+      ],
+      "matches": [
+        {
+          "bank": {
+            "id": "4c000",
+            "label": "Bank 0x04C000",
+            "start": 311296,
+            "end": 376832
+          },
+          "curve": {
+            "address": 346758,
+            "axisAddress": 346754,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              341794,
+              341798,
+              341838
+            ],
+            "scalarAddress": 342688,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        },
+        {
+          "bank": {
+            "id": "6c000",
+            "label": "Bank 0x06C000",
+            "start": 442368,
+            "end": 507904
+          },
+          "curve": {
+            "address": 477830,
+            "axisAddress": 477826,
+            "input": [
+              82,
+              989
+            ],
+            "pressure": [
+              200,
+              2600
+            ],
+            "encoding": "adc10"
+          },
+          "diagnostics": {
+            "addresses": [
+              472866,
+              472870,
+              472910
+            ],
+            "scalarAddress": 473760,
+            "scalar": 980,
+            "message": 18,
+            "multiplier": 255
+          },
+          "notes": []
+        }
+      ]
+    }
+  ]
+}
